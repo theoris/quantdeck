@@ -1,0 +1,22 @@
+//@version=5
+library("UniversalRiskEngine", overlay = false)
+
+// @function Calculates contract/share volume normalized to account risk parameters.
+// @param entryPrice Planned execution price.
+// @param slPrice Stop loss price level.
+// @param riskCash Maximum cash capital allocated to risk.
+// @returns Validated order quantity (contracts, shares, or lots).
+export calculateOrderQty(float entryPrice, float slPrice, float riskCash) =>
+    priceDistance = math.abs(entryPrice - slPrice)
+    
+    // Protection against invalid user input or market division by zero
+    if priceDistance <= 0.0 or riskCash <= 0.0 or syminfo.pointvalue <= 0.0
+        0.0
+    else
+        // Direct metric calculation eliminating tick dimension
+        riskPerContract = priceDistance * syminfo.pointvalue
+        rawContracts     = riskCash / riskPerContract
+        
+        // Conservative truncation (round down to integer or unit step)
+        finalContracts   = math.floor(rawContracts)
+        finalContracts
