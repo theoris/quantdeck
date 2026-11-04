@@ -1,0 +1,10 @@
+{
+  "size_bytes": 20349556,
+  "size_mb": 19.41,
+  "sha256": "fbd5ae61b63778ef625d46befc92e5865a19feab2c92722af6ca2bad42af2ca6",
+  "created_at": "2026-11-04T15:37:48.316610",
+  "files": [
+    "symbols_master.db",
+    "stock_data.db"
+  ]
+}
