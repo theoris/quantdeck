@@ -50,15 +50,15 @@
 
 | Release Asset | File Size | Description & Recommended Use |
 | :--- | :---: | :--- |
-| **`QuantDeck_Standalone_Setup.exe`** | **4.76 MB** | **Recommended for most users.** Self-contained Windows installer & launcher. Extracts files, configures desktop shortcuts, and launches QuantDeck in 1 click. |
-| **`QuantDeck_Standalone_Release.zip`** | **4.68 MB** | **Portable package.** Extract anywhere (including USB drives) and run without system installation. |
+| **`QuantDeck_Standalone_Setup.exe`** | **4.78 MB** | **Recommended for most users.** Self-contained Windows installer & launcher. Extracts files, configures desktop shortcuts, and launches QuantDeck in 1 click. |
+| **`QuantDeck_Standalone_Release.zip`** | **4.71 MB** | **Portable package.** Extract anywhere (including USB drives) and run without system installation. |
 | **`SHA256SUMS.txt`** | **~10 KB** | **Integrity Checksum Manifest.** Complete cryptographic SHA-256 signatures for every file in the release. |
 
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-5E095BC467F7C91A81234E611C662D0D0ACF153101EA542959FECFE5C68E7E31  QuantDeck_Standalone_Release.zip
-9890AB76A667508F38C4660B90D2DDEC6B59822ED151B3F52179785B5E622CB5  QuantDeck_Standalone_Setup.exe
+D4885A9F68CC4CE8ABFAE2E6305A8CB8325981FD5EEE7C5DC9F42E70320B527B  QuantDeck_Standalone_Release.zip
+648B0B2DFBD9A128E0B4BA4E8FB3903C11558C8AF33447D218F5D31DC370B197  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
