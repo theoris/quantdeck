@@ -1,4 +1,4 @@
-# QuantDeck v2.2.1 — Estación de Trabajo Institucional de Gráficos y Trading Multibroker
+# QuantDeck v2.2.2 — Estación de Trabajo Institucional de Gráficos y Trading Multibroker
 
 > **Una única estación de trabajo de escritorio para análisis técnico, backtesting y ejecución automatizada.** Compatible con Forex, Oro, Criptomonedas, Índices, Acciones de EE. UU. y la bolsa de Tailandia SET/TFEX.  
 > Conecte **MetaTrader 5, cTrader y SimpleFX** simultáneamente. Trace análisis con más de 70 herramientas profesionales, ejecute backtests visuales con optimización por hiperparámetros de Optuna, opere bots automáticos 24/7 y gestione su cartera de forma centralizada con el Execution Toolbox.

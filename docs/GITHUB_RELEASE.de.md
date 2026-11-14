@@ -1,4 +1,4 @@
-# QuantDeck v2.2.1 — Institutionelle Charting- & Multi-Broker-Trading-Workstation
+# QuantDeck v2.2.2 — Institutionelle Charting- & Multi-Broker-Trading-Workstation
 
 > **Eine einheitliche Desktop-Workstation für Chartanalyse, Backtesting und automatisierte Orderausführung.** Unterstützt Forex, Gold, Krypto, Indizes, US-Aktien und den thailändischen Markt SET/TFEX.  
 > Verbinden Sie **MetaTrader 5, cTrader und SimpleFX** gleichzeitig. Analysieren Sie Charts mit über 70 professionellen Zeichenwerkzeugen, führen Sie visuelle Backtests mit Optuna-Hyperparameter-Optimierung durch, betreiben Sie automatisierte 24/7-Bots und steuern Sie Ihr gesamtes Portfolio über die zentrale Execution Toolbox.
