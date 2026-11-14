@@ -1,4 +1,4 @@
-# QuantDeck v2.2.3 — 机构级量化图表工作站与多经纪商统一交易系统
+# QuantDeck v2.2.4 — 机构级量化图表工作站与多经纪商统一交易系统
 
 > **集专业图表分析、量化回测与全自动交易于一体的独立桌面工作站。** 全面覆盖外汇、黄金（XAUUSD）、加密货币、全球指数、美股以及泰国 SET/TFEX 市场。  
 > 支持在同一屏幕内同时连接 **MetaTrader 5、cTrader Open API 与 SimpleFX**。配备 70 多种专业绘图分析工具、基于 Optuna 的参数优化回测引擎、24/7 全天候自动化交易机器人，并通过中央交易工具箱（Toolbox）统筹掌控多账户风险。
@@ -52,8 +52,8 @@
 ### 🔐 完整性安全校验码 (SHA-256)
 
 ```text
-90BD65A60E5DD7CDC786AA483880CCF3C594E08161ADB8B39336EA63B051A9B7  QuantDeck_Standalone_Release.zip
-2437DF3166FF40B98473C46772F3D8EFBF26C1F4411BADEAC7D194D090C9ADCF  QuantDeck_Standalone_Setup.exe
+145EB6589ADC251804F9183CCF114F8BBA763A80A6E0EE5973297EB7FABBB514  QuantDeck_Standalone_Release.zip
+6BCA2E98653F9870AA726F36F41AE02091B8F2812D209D99D6B6A429B9BCE70E  QuantDeck_Standalone_Setup.exe
 ```
 
 在 Windows PowerShell 中进行文件校验：

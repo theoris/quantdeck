@@ -1,4 +1,4 @@
-# QuantDeck v2.2.3 — Trạm Làm Việc Phân Tích Kỹ Thuật Đa Sàn Chuẩn Tổ Chức
+# QuantDeck v2.2.4 — Trạm Làm Việc Phân Tích Kỹ Thuật Đa Sàn Chuẩn Tổ Chức
 
 > **Một trạm làm việc (workstation) duy nhất trên máy tính dành cho phân tích biểu đồ, kiểm thử chiến lược (backtesting) và tự động khớp lệnh.** Hỗ trợ Forex, Vàng, Tiền mã hóa, Chỉ số, Cổ phiếu Mỹ và TTCK Thái Lan SET/TFEX.  
 > Kết nối đồng thời **MT5, cTrader và SimpleFX**. Vẽ biểu đồ với hơn 70 công cụ chuẩn tổ chức, backtest trực quan với thuật toán tối ưu hóa tham số Optuna, vận hành bot tự động 24/7 và quản lý danh mục toàn diện từ Execution Toolbox tập trung.
@@ -57,8 +57,8 @@
 ### 🔐 Xác minh tính toàn vẹn của tệp (SHA-256)
 
 ```text
-90BD65A60E5DD7CDC786AA483880CCF3C594E08161ADB8B39336EA63B051A9B7  QuantDeck_Standalone_Release.zip
-2437DF3166FF40B98473C46772F3D8EFBF26C1F4411BADEAC7D194D090C9ADCF  QuantDeck_Standalone_Setup.exe
+145EB6589ADC251804F9183CCF114F8BBA763A80A6E0EE5973297EB7FABBB514  QuantDeck_Standalone_Release.zip
+6BCA2E98653F9870AA726F36F41AE02091B8F2812D209D99D6B6A429B9BCE70E  QuantDeck_Standalone_Setup.exe
 ```
 
 Cách kiểm tra mã băm SHA-256 bằng Windows PowerShell:

@@ -1,4 +1,4 @@
-# QuantDeck v2.2.3 — Estación de Trabajo Institucional de Gráficos y Trading Multibroker
+# QuantDeck v2.2.4 — Estación de Trabajo Institucional de Gráficos y Trading Multibroker
 
 > **Una única estación de trabajo de escritorio para análisis técnico, backtesting y ejecución automatizada.** Compatible con Forex, Oro, Criptomonedas, Índices, Acciones de EE. UU. y la bolsa de Tailandia SET/TFEX.  
 > Conecte **MetaTrader 5, cTrader y SimpleFX** simultáneamente. Trace análisis con más de 70 herramientas profesionales, ejecute backtests visuales con optimización por hiperparámetros de Optuna, opere bots automáticos 24/7 y gestione su cartera de forma centralizada con el Execution Toolbox.
@@ -57,8 +57,8 @@
 ### 🔐 Verificación Criptográfica (SHA-256)
 
 ```text
-90BD65A60E5DD7CDC786AA483880CCF3C594E08161ADB8B39336EA63B051A9B7  QuantDeck_Standalone_Release.zip
-2437DF3166FF40B98473C46772F3D8EFBF26C1F4411BADEAC7D194D090C9ADCF  QuantDeck_Standalone_Setup.exe
+145EB6589ADC251804F9183CCF114F8BBA763A80A6E0EE5973297EB7FABBB514  QuantDeck_Standalone_Release.zip
+6BCA2E98653F9870AA726F36F41AE02091B8F2812D209D99D6B6A429B9BCE70E  QuantDeck_Standalone_Setup.exe
 ```
 
 Para verificar la integridad del archivo en Windows PowerShell:

@@ -1,4 +1,4 @@
-# QuantDeck v2.2.3 — 機関投資家向けチャートワークステーション＆マルチブローカー統合発注システム
+# QuantDeck v2.2.4 — 機関投資家向けチャートワークステーション＆マルチブローカー統合発注システム
 
 > **高度なチャート分析、戦略バックテスト、全自動ボット実行を統合したスタンドアロンデスクトップワークステーション。** 為替（FX）、ゴールド（XAUUSD）、暗号資産、世界主要指数、米国株、およびタイ株式（SET/TFEX）市場を完全網羅。  
 > 1つの画面上で **MetaTrader 5、cTrader Open API、SimpleFX** に同時接続。70種類以上のプロ仕様の描画分析ツール、Optunaパラメータ最適化エンジン、24時間365日稼働の自動売買ボット、そして集中管理型Execution Toolboxを搭載しています。
@@ -52,8 +52,8 @@
 ### 🔐 暗号学的整合性検証 (SHA-256)
 
 ```text
-90BD65A60E5DD7CDC786AA483880CCF3C594E08161ADB8B39336EA63B051A9B7  QuantDeck_Standalone_Release.zip
-2437DF3166FF40B98473C46772F3D8EFBF26C1F4411BADEAC7D194D090C9ADCF  QuantDeck_Standalone_Setup.exe
+145EB6589ADC251804F9183CCF114F8BBA763A80A6E0EE5973297EB7FABBB514  QuantDeck_Standalone_Release.zip
+6BCA2E98653F9870AA726F36F41AE02091B8F2812D209D99D6B6A429B9BCE70E  QuantDeck_Standalone_Setup.exe
 ```
 
 PowerShellでのハッシュ検証コマンド：

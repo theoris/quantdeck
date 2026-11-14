@@ -1,4 +1,4 @@
-# QuantDeck v2.2.3 — 기관급 차트 분석 및 다중 브로커 트레이딩 워크스테이션
+# QuantDeck v2.2.4 — 기관급 차트 분석 및 다중 브로커 트레이딩 워크스테이션
 
 > **차트 분석, 백테스팅, 자동 매매 실행을 하나의 데스크톱 워크스테이션에서.** 외환(Forex), 금(Gold), 암호화폐, 지수(Indices), 미국 주식 및 태국 SET/TFEX 지원.  
 > **MetaTrader 5, cTrader, SimpleFX**를 동시에 연결하세요. 70개 이상의 기관급 분석 도구로 차트를 작도하고, Optuna 최적화를 통한 시각적 백테스팅을 실행하며, 24시간 실시간 봇을 가동하고 중앙 집중식 Execution Toolbox에서 포트폴리오를 완벽하게 관리하세요.
@@ -57,8 +57,8 @@
 ### 🔐 파일 무결성 암호화 검증 (SHA-256)
 
 ```text
-90BD65A60E5DD7CDC786AA483880CCF3C594E08161ADB8B39336EA63B051A9B7  QuantDeck_Standalone_Release.zip
-2437DF3166FF40B98473C46772F3D8EFBF26C1F4411BADEAC7D194D090C9ADCF  QuantDeck_Standalone_Setup.exe
+145EB6589ADC251804F9183CCF114F8BBA763A80A6E0EE5973297EB7FABBB514  QuantDeck_Standalone_Release.zip
+6BCA2E98653F9870AA726F36F41AE02091B8F2812D209D99D6B6A429B9BCE70E  QuantDeck_Standalone_Setup.exe
 ```
 
 Windows PowerShell에서 파일 무결성을 검증하는 방법:
