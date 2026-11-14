@@ -1,4 +1,4 @@
-# QuantDeck v2.2.0 — Trạm Làm Việc Phân Tích Kỹ Thuật Đa Sàn Chuẩn Tổ Chức
+# QuantDeck v2.2.1 — Trạm Làm Việc Phân Tích Kỹ Thuật Đa Sàn Chuẩn Tổ Chức
 
 > **Một trạm làm việc (workstation) duy nhất trên máy tính dành cho phân tích biểu đồ, kiểm thử chiến lược (backtesting) và tự động khớp lệnh.** Hỗ trợ Forex, Vàng, Tiền mã hóa, Chỉ số, Cổ phiếu Mỹ và TTCK Thái Lan SET/TFEX.  
 > Kết nối đồng thời **MT5, cTrader và SimpleFX**. Vẽ biểu đồ với hơn 70 công cụ chuẩn tổ chức, backtest trực quan với thuật toán tối ưu hóa tham số Optuna, vận hành bot tự động 24/7 và quản lý danh mục toàn diện từ Execution Toolbox tập trung.
