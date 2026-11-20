@@ -1,4 +1,4 @@
-# QuantDeck v2.4.2 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.3 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -57,8 +57,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-457D30A0BC294D14F2EAE0890ACE400454DAC4F3363012157112D303474662D1  QuantDeck_Standalone_Release.zip
-1F57B2A473DCDB4BBC15E76F12E78B05069C74D102809FCF02C5BDF8E0F654DD  QuantDeck_Standalone_Setup.exe
+0754101ACC053206A55D569A93EE11274E357DE6DC05AD09B096845C1AF538A5  QuantDeck_Standalone_Release.zip
+705638F9A2D66D51B0108D74F1658CBA932567B020F2600DF0242128B0F9A5CC  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
