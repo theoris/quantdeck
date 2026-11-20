@@ -1,0 +1,5 @@
+# Never commit release binaries into Git history — upload them as GitHub Release Assets instead
+releases/*.exe
+releases/*.zip
+*.exe
+*.zip
