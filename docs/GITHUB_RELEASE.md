@@ -1,4 +1,4 @@
-# QuantDeck v2.4.8 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.9 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -7,7 +7,7 @@
 ![Python](https://img.shields.io/badge/runtime-Python%203.12-yellow)
 ![Languages](https://img.shields.io/badge/UI-9%20languages-green)
 ![License Tiers](https://img.shields.io/badge/tiers-Free%20%7C%20Trial%20%7C%20Pro%20%7C%20Premium-orange)
-![Download Size](https://img.shields.io/badge/download-~4%20MB-brightgreen)
+![Download Size](https://img.shields.io/badge/download-~5.2%20MB-brightgreen)
 [![GitHub Downloads](https://img.shields.io/github/downloads/theoris/quantdeck/total?color=brightgreen&label=Downloads)](https://github.com/theoris/quantdeck/releases)
 [![Discord](https://img.shields.io/badge/Discord-Community-5865F2?logo=discord&logoColor=white)](https://discord.gg/qRmMWjcTE)
 [![YouTube](https://img.shields.io/badge/YouTube-@QuantDeck-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/@QuantDeck)
@@ -23,6 +23,14 @@
 
 <!-- Workstation Preview Screenshot / Demo GIF -->
 <!-- ![QuantDeck Multi-Broker Workstation](https://raw.githubusercontent.com/theoris/quantdeck/main/docs/assets/quantdeck_preview.png) -->
+
+---
+
+## ✨ What's New in v2.4.9
+
+- **Unified Measurement & CAD Dimension Toolset:** Consolidated `Ruler`, `Price & PnL Ruler`, and **6 new CAD-style Dimension Tools** (`Linear`, `Aligned`, `Radial (R)`, `Diameter (Ø)`, `Angular (°)`, and `Ordinate (X/Y)`) into a single flyout group on the left toolbar. Updated default `Ruler` style to transparent background (`showBg = false`).
+- **CAD Dimension Styling & Defaults Persistence:** Added independent Start/End Terminators (*Closed Filled Arrowhead*, *Architectural Tick*, *Filled Dot*, *Open Circle*, *None*), configurable *Extension Line Offset / Extension*, *Dimension Text Position* (*Centered* with automatic gap break, *Above*, *Lower*), color & unit toggles, floating non-blocking settings modal, and persistent style defaults in `localStorage`.
+- **Full 9-Language i18n Parity (100% — 743 Keys):** Completed native translations across all **9 UI languages** (`en`, `th`, `zh`, `ja`, `ko`, `de`, `es`, `vi`, `ar`) covering all Measurement & CAD Dimension controls, AI HTML Export dialogs, Bot Manager columns, Toolbox actions, and context menus.
 
 ---
 
@@ -50,15 +58,15 @@
 
 | Release Asset | File Size | Description & Recommended Use |
 | :--- | :---: | :--- |
-| **`QuantDeck_Standalone_Setup.exe`** | **4.96 MB** | **Recommended for most users.** Self-contained Windows installer & launcher. Extracts files, configures desktop shortcuts, and launches QuantDeck in 1 click. |
-| **`QuantDeck_Standalone_Release.zip`** | **4.89 MB** | **Portable package.** Extract anywhere (including USB drives) and run without system installation. |
+| **`QuantDeck_Standalone_Setup.exe`** | **~5.2 MB** | **Recommended for most users.** Self-contained Windows installer & launcher. Extracts files, configures desktop shortcuts, and launches QuantDeck in 1 click. |
+| **`QuantDeck_Standalone_Release.zip`** | **~5.1 MB** | **Portable package.** Extract anywhere (including USB drives) and run without system installation. |
 | **`SHA256SUMS.txt`** | **~10 KB** | **Integrity Checksum Manifest.** Complete cryptographic SHA-256 signatures for every file in the release. |
 
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-FDD7A2AEEFB2BA244A9B2E635E90BBC480F0537778B7FC2C9EAA53D9E3C10C13  QuantDeck_Standalone_Release.zip
-7559AA8B250EC959018F6EF4B7DC5FBD01EA8D0ADE974451EBEE0D95334C9F89  QuantDeck_Standalone_Setup.exe
+9AAAB9772FFC8727193EDBD83F511EC1A1451780E3BBB595A0F0874F1122605D  QuantDeck_Standalone_Release.zip
+5E2E2AEBF813E6B8B9BACE817D5B8F10175E22970D5E9FD3956BF84132938460  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
