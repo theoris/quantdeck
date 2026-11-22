@@ -1,4 +1,4 @@
-# QuantDeck v2.4.9 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.10 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -26,11 +26,11 @@
 
 ---
 
-## ✨ What's New in v2.4.9
+## ✨ What's New in v2.4.10
 
-- **Unified Measurement & CAD Dimension Toolset:** Consolidated `Ruler`, `Price & PnL Ruler`, and **6 new CAD-style Dimension Tools** (`Linear`, `Aligned`, `Radial (R)`, `Diameter (Ø)`, `Angular (°)`, and `Ordinate (X/Y)`) into a single flyout group on the left toolbar. Updated default `Ruler` style to transparent background (`showBg = false`).
-- **CAD Dimension Styling & Defaults Persistence:** Added independent Start/End Terminators (*Closed Filled Arrowhead*, *Architectural Tick*, *Filled Dot*, *Open Circle*, *None*), configurable *Extension Line Offset / Extension*, *Dimension Text Position* (*Centered* with automatic gap break, *Above*, *Lower*), color & unit toggles, floating non-blocking settings modal, and persistent style defaults in `localStorage`.
-- **Full 9-Language i18n Parity (100% — 743 Keys):** Completed native translations across all **9 UI languages** (`en`, `th`, `zh`, `ja`, `ko`, `de`, `es`, `vi`, `ar`) covering all Measurement & CAD Dimension controls, AI HTML Export dialogs, Bot Manager columns, Toolbox actions, and context menus.
+- **In-App Auto-Updater (Level 2):** Silently checks GitHub Releases every 6 hours (with offline fallback). When a newer version is available, the Topbar License Badge transforms into **`⬆ Update vX.Y.Z`**; clicking it opens the License & Upgrade dialog with collapsible release notes, live download progress bar, automatic **SHA-256 verification**, active-bot warning, Dev workspace safety guard, and one-click **`QuantDeck_Standalone_Setup.exe --target-dir`** launcher (preserving all `user_data` & `app_config.json`). When already on the latest version, the top bar displays only the current version (`QuantDeck vX.Y.Z · Up to date`) without any download button.
+- **9-Language i18n Parity (100% — 765 Keys):** Added full native translations for all new updater UI states across English, Thai, Chinese, Japanese, Korean, German, Spanish, Vietnamese, and Arabic.
+- *(Includes all `v2.4.9` Unified Measurement Tool & CAD Dimension Tools.)*
 
 ---
 
@@ -65,8 +65,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-9AAAB9772FFC8727193EDBD83F511EC1A1451780E3BBB595A0F0874F1122605D  QuantDeck_Standalone_Release.zip
-5E2E2AEBF813E6B8B9BACE817D5B8F10175E22970D5E9FD3956BF84132938460  QuantDeck_Standalone_Setup.exe
+B4678E69C95752CCCD3A09841141F4482775E404C8C308B8AD1462288627ED3F  QuantDeck_Standalone_Release.zip
+3783BA552E348A5B536E122F2A49FECB6C628091F046A6EAF0DD97ED41D5048E  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
