@@ -1,4 +1,4 @@
-# QuantDeck v2.4.11 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.12 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -7,7 +7,7 @@
 ![Python](https://img.shields.io/badge/runtime-Python%203.12-yellow)
 ![Languages](https://img.shields.io/badge/UI-9%20languages-green)
 ![License Tiers](https://img.shields.io/badge/tiers-Free%20%7C%20Trial%20%7C%20Pro%20%7C%20Premium-orange)
-![Download Size](https://img.shields.io/badge/download-~5.2%20MB-brightgreen)
+![Download Size](https://img.shields.io/badge/download-~5.3%20MB-brightgreen)
 [![GitHub Downloads](https://img.shields.io/github/downloads/theoris/quantdeck/total?color=brightgreen&label=Downloads)](https://github.com/theoris/quantdeck/releases)
 [![Discord](https://img.shields.io/badge/Discord-Community-5865F2?logo=discord&logoColor=white)](https://discord.gg/qRmMWjcTE)
 [![YouTube](https://img.shields.io/badge/YouTube-@QuantDeck-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/@QuantDeck)
@@ -26,15 +26,15 @@
 
 ---
 
-## ✨ What's New in v2.4.11
+## ✨ What's New in v2.4.12
 
-- **Drawing Tools Reorganization (Left Sidebar):** Reordered into an institutional flow (`Pointer → Brush (4 grouped sections) → Trend line → Shapes (with Circle Sector) → Fib → Pattern → Magnet → Volume-Based Tools → VP`), plus a dedicated soft-red Danger Group for **Remove All Indicators** & **Remove All Drawings**.
-- **Magnet OHLC Snapping Engine:** Toggle **Off / Weak Magnet (26px) / Strong Magnet** directly from the left sidebar (`Left-click` toggle, `Right-click` or `▶` flyout, `Ctrl` temporary invert), complete with live snap ring + OHLC pill (`O`/`H`/`L`/`C`), multi-chart synchronization, and instant right-click cancel + Magnet disable while drawing.
-- **Unified CAD-Standard Floating Settings & Defaults:** Standardized CAD-style floating settings windows (`Style / Parameters / Coordinates / Visibility`, `Live Preview`, `Cancel` rollback, `💾 Save as Default`, `↺ Reset`, Dark/Light theme) across Drawing Tools, Text/Callouts, Fibonacci, Elliott Waves, Price/Date Range, and PnL Rulers, unified with CAD Dimension `#38bdf8` default line/text color.
-- **Full 9-Language i18n Parity (1,065 Keys):** Complete native translations and tooltips across English, Thai, Chinese, Japanese, Korean, German, Spanish, Vietnamese, and Arabic.
-- **About Modal Update Check:** Added the shared in-app Update Check card (`Check for Updates` / `Download & Upgrade`) directly inside the About modal.
-- **Floating BOT Manager Performance Report:** Converted the BOT Manager Report dialog into a draggable, resizable, maximizable floating window with remembered viewport-clamped bounds so traders can inspect live bot performance over the chart.
-- *(Includes all `v2.4.10` In-App Auto-Updater & `v2.4.9` Unified Measurement / CAD Dimension features.)*
+- **Local Image Uploads, Opacity & Behind-Chart Layering:** Upload images directly from disk (File Picker, Drag & Drop, or `Ctrl+V` clipboard paste) into persistent `user_data/images/` alongside URL support. Images default to **30% opacity** and **Behind Chart (`Send to Back`)** rendered on a dedicated underlay canvas under candlesticks/indicators, with instant Property Bar controls (`🖼️ Image`, `⬇ Back` / `⬆ Front`, `Op` 5%–100%, `▭ Border`, `📐 Fit`) and locked behind-chart edge-only selection so normal chart panning stays unobstructed.
+- **Full-App Native Windows Snapshot:** Added `POST /api/app/screenshot` (Win32 `BitBlt`/`PrintWindow`, Per-Monitor DPI aware) to capture the complete desktop workstation—including Topbar, Left/Right Sidebars, multi-chart canvases, and floating windows—with quick **🖥️ Full App** and **📊 Charts Only** buttons in the Snip overlay, theme-aware fallback surfaces, and fixed watermark badge sizing.
+- **Multi-Chart & Custom Timeframe (`D3`, etc.) Drawing Persistence Fix:** Fixed drawing loss on secondary slots (`slot.id !== 1`) and after multi-chart layout swaps via `StateStore.saveDrawingsOnly(...)`, unified `onSlotDataChanged` mirroring to shared drawing profiles, newer-disk precedence during profile merges, serialized per-file `DiskStorageSync` queue with atomic `.tmp` writes + `pagehide` unload flush, and full custom timeframe visibility (`D3`, etc.) support.
+- **Theme-Adaptive Drawing Colors & Per-Theme Overrides:** Added automatic contrast-aware drawing defaults (`Auto Drawing Color` for Dark/Light themes) plus per-theme overrides for custom default **Drawing Line** and **Drawing Text** colors inside Chart Settings.
+- **Multi-Chart Slot Swapping:** Reorder chart panes effortlessly via header `◀`/`▶` swap buttons or Header Drag & Drop (kept non-destructive until explicit Save Layout).
+- **`Text` Drawing Selection & Rename + Floating Indicator Modals:** Renamed `"Text Annotation"` → `"Text"` across all 9 locales (1,068 synced keys), added exact bounding-box hit-testing and dashed selection outlines for `Text`, `Comment`, `Price Label`, and `Callout` tools, and upgraded Technical Indicators & Indicator Settings dialogs to draggable floating windows.
+- *(Includes all `v2.4.11` Drawing Tools Reorganization, Magnet OHLC Snapping Engine & CAD-Standard Floating Settings features.)*
 
 ---
 
@@ -62,15 +62,15 @@
 
 | Release Asset | File Size | Description & Recommended Use |
 | :--- | :---: | :--- |
-| **`QuantDeck_Standalone_Setup.exe`** | **~5.2 MB** | **Recommended for most users.** Self-contained Windows installer & launcher. Extracts files, configures desktop shortcuts, and launches QuantDeck in 1 click. |
-| **`QuantDeck_Standalone_Release.zip`** | **~5.1 MB** | **Portable package.** Extract anywhere (including USB drives) and run without system installation. |
+| **`QuantDeck_Standalone_Setup.exe`** | **~5.3 MB** | **Recommended for most users.** Self-contained Windows installer & launcher. Extracts files, configures desktop shortcuts, and launches QuantDeck in 1 click. |
+| **`QuantDeck_Standalone_Release.zip`** | **~5.2 MB** | **Portable package.** Extract anywhere (including USB drives) and run without system installation. |
 | **`SHA256SUMS.txt`** | **~10 KB** | **Integrity Checksum Manifest.** Complete cryptographic SHA-256 signatures for every file in the release. |
 
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-8E11680EB63B566810094B240C463DD02477FB75572D19227DC644BB7C82A6F8  QuantDeck_Standalone_Release.zip
-BB7952F4B081500C41EB97887868E1F5EEAB86881DF510F405C39A8ED31128CE  QuantDeck_Standalone_Setup.exe
+D8130A78F30B1308B1D01228B57C246B52C6D3060F9C1A520E0EF93BC2E2066E  QuantDeck_Standalone_Release.zip
+80FC11A66828A3269D015CA16504967901C56737A9F2C02FD566A3BE4B71DFE4  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
