@@ -1,4 +1,4 @@
-# QuantDeck v2.4.10 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.11 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -26,11 +26,15 @@
 
 ---
 
-## ✨ What's New in v2.4.10
+## ✨ What's New in v2.4.11
 
-- **In-App Auto-Updater (Level 2):** Silently checks GitHub Releases every 6 hours (with offline fallback). When a newer version is available, the Topbar License Badge transforms into **`⬆ Update vX.Y.Z`**; clicking it opens the License & Upgrade dialog with collapsible release notes, live download progress bar, automatic **SHA-256 verification**, active-bot warning, Dev workspace safety guard, and one-click **`QuantDeck_Standalone_Setup.exe --target-dir`** launcher (preserving all `user_data` & `app_config.json`). When already on the latest version, the top bar displays only the current version (`QuantDeck vX.Y.Z · Up to date`) without any download button.
-- **9-Language i18n Parity (100% — 765 Keys):** Added full native translations for all new updater UI states across English, Thai, Chinese, Japanese, Korean, German, Spanish, Vietnamese, and Arabic.
-- *(Includes all `v2.4.9` Unified Measurement Tool & CAD Dimension Tools.)*
+- **Drawing Tools Reorganization (Left Sidebar):** Reordered into an institutional flow (`Pointer → Brush (4 grouped sections) → Trend line → Shapes (with Circle Sector) → Fib → Pattern → Magnet → Volume-Based Tools → VP`), plus a dedicated soft-red Danger Group for **Remove All Indicators** & **Remove All Drawings**.
+- **Magnet OHLC Snapping Engine:** Toggle **Off / Weak Magnet (26px) / Strong Magnet** directly from the left sidebar (`Left-click` toggle, `Right-click` or `▶` flyout, `Ctrl` temporary invert), complete with live snap ring + OHLC pill (`O`/`H`/`L`/`C`), multi-chart synchronization, and instant right-click cancel + Magnet disable while drawing.
+- **Unified CAD-Standard Floating Settings & Defaults:** Standardized CAD-style floating settings windows (`Style / Parameters / Coordinates / Visibility`, `Live Preview`, `Cancel` rollback, `💾 Save as Default`, `↺ Reset`, Dark/Light theme) across Drawing Tools, Text/Callouts, Fibonacci, Elliott Waves, Price/Date Range, and PnL Rulers, unified with CAD Dimension `#38bdf8` default line/text color.
+- **Full 9-Language i18n Parity (1,065 Keys):** Complete native translations and tooltips across English, Thai, Chinese, Japanese, Korean, German, Spanish, Vietnamese, and Arabic.
+- **About Modal Update Check:** Added the shared in-app Update Check card (`Check for Updates` / `Download & Upgrade`) directly inside the About modal.
+- **Floating BOT Manager Performance Report:** Converted the BOT Manager Report dialog into a draggable, resizable, maximizable floating window with remembered viewport-clamped bounds so traders can inspect live bot performance over the chart.
+- *(Includes all `v2.4.10` In-App Auto-Updater & `v2.4.9` Unified Measurement / CAD Dimension features.)*
 
 ---
 
@@ -65,8 +69,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-B4678E69C95752CCCD3A09841141F4482775E404C8C308B8AD1462288627ED3F  QuantDeck_Standalone_Release.zip
-3783BA552E348A5B536E122F2A49FECB6C628091F046A6EAF0DD97ED41D5048E  QuantDeck_Standalone_Setup.exe
+8E11680EB63B566810094B240C463DD02477FB75572D19227DC644BB7C82A6F8  QuantDeck_Standalone_Release.zip
+BB7952F4B081500C41EB97887868E1F5EEAB86881DF510F405C39A8ED31128CE  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
