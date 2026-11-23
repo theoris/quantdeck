@@ -1,4 +1,4 @@
-# QuantDeck v2.4.16 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.17 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -26,13 +26,13 @@
 
 ---
 
-## ✨ What's New in v2.4.16
+## ✨ What's New in v2.4.17
 
-- **DNS-Resilient IPv4 + Direct-DNS + Sticky-IP Broker Protection (`SimpleFX` & `cTrader`):** Added a shared `ResilientDNSResolver` (`connection/dns_resilience.py`) to eliminate `[getaddrinfo failed]` and Windows DNS Client Event ID 1014 timeouts during trading:
-  - Enforces IPv4-first resolution (`socket.AF_INET`) and extends `aiohttp` DNS caching from `10s` to `600s` via `ResilientAiohttpResolver` while preserving full TLS SNI & certificate verification.
-  - Falls back automatically to direct UDP DNS (`8.8.8.8`, `1.1.1.1`, `8.8.4.4`) and Cloudflare DoH (`1.1.1.1`) whenever OS DNS stalls, plus a 24-hour in-memory & 7-day persistent `%LOCALAPPDATA%\QuantDeck\dns_cache.json` sticky-IP cache with startup prewarming.
-  - Installs a resilient `GAIResolver` directly onto the Twisted reactor for `cTrader` Open API (`live.ctraderapi.com` / `demo.ctraderapi.com`) and distinguishes transient OAuth refresh network/DNS errors from genuine token revocations.
-- *(Includes all `v2.4.15` Broker Reconnection Grace Period, Minimal Theme-Adaptive Order / Pending Lines, and `On Startup: 1 Chart | Last Session` Layout Preference, plus `v2.4.14` & `v2.4.13` improvements.)*
+- **cTrader Zero-Zombie Socket & Handshake Isolation (`connection/ctrader_protocol.py` + `CTraderDataSource` / `CTraderClient`):**
+  - Replaced `ctrader_open_api.TcpProtocol` with `IsolatedTcpProtocol` giving every connection its own `_send_queue` / `_send_task`, preventing disconnected sockets from stealing `ProtoOAApplicationAuthReq` / `ProtoOAAccountAuthReq` frames off another socket's shared class queue and breaking the infinite 32-second disconnect loop after temporary internet drops.
+  - Added `force_stop_ctrader_client()` bypassing `Client.stopService()`'s broken `if self.isConnected:` guard so stopped/replaced Twisted `ClientService` instances never linger as background zombies, paired with a bounded `1s → 10s` Twisted reconnect policy and `_app_authorized` gating (`ProtoOAApplicationAuthRes 2101`) so a single live client recovers cleanly on its own.
+- **SimpleFX Single-Task WebSocket Guard (`SimpleFXClient`):** Prevented `start()` from spawning duplicate concurrent `_ws_task` loops and tied `_ws_loop` cleanly to `_explicit_stop`.
+- *(Includes all `v2.4.16` DNS-Resilient IPv4 + Direct-DNS + Sticky-IP Cache Protection, `v2.4.15` Broker Reconnection Grace Period & Minimal Theme-Adaptive Order Lines & Startup Layout Preference, plus `v2.4.14` & `v2.4.13` improvements.)*
 
 ---
 
@@ -67,8 +67,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-873A20FE36E1118675F01D3018BB97825C568B14DA82D40853DFC4008F062760  QuantDeck_Standalone_Release.zip
-0102E823FE118E50122C76EC140E3C0AB674AEDE0BDA9B8294FDF5EED99FADE5  QuantDeck_Standalone_Setup.exe
+8838D5158664BAA8531630AF25925CE20FC5B5BA392844EF6285574B01F8C949  QuantDeck_Standalone_Release.zip
+119274FDD103D43D5C8C239FFF77E1E64B885F0DA582C598BDB967D78E0B3F94  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
