@@ -1,4 +1,4 @@
-# QuantDeck v2.4.12 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.13 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -26,15 +26,11 @@
 
 ---
 
-## ✨ What's New in v2.4.12
+## ✨ What's New in v2.4.13
 
-- **Local Image Uploads, Opacity & Behind-Chart Layering:** Upload images directly from disk (File Picker, Drag & Drop, or `Ctrl+V` clipboard paste) into persistent `user_data/images/` alongside URL support. Images default to **30% opacity** and **Behind Chart (`Send to Back`)** rendered on a dedicated underlay canvas under candlesticks/indicators, with instant Property Bar controls (`🖼️ Image`, `⬇ Back` / `⬆ Front`, `Op` 5%–100%, `▭ Border`, `📐 Fit`) and locked behind-chart edge-only selection so normal chart panning stays unobstructed.
-- **Full-App Native Windows Snapshot:** Added `POST /api/app/screenshot` (Win32 `BitBlt`/`PrintWindow`, Per-Monitor DPI aware) to capture the complete desktop workstation—including Topbar, Left/Right Sidebars, multi-chart canvases, and floating windows—with quick **🖥️ Full App** and **📊 Charts Only** buttons in the Snip overlay, theme-aware fallback surfaces, and fixed watermark badge sizing.
-- **Multi-Chart & Custom Timeframe (`D3`, etc.) Drawing Persistence Fix:** Fixed drawing loss on secondary slots (`slot.id !== 1`) and after multi-chart layout swaps via `StateStore.saveDrawingsOnly(...)`, unified `onSlotDataChanged` mirroring to shared drawing profiles, newer-disk precedence during profile merges, serialized per-file `DiskStorageSync` queue with atomic `.tmp` writes + `pagehide` unload flush, and full custom timeframe visibility (`D3`, etc.) support.
-- **Theme-Adaptive Drawing Colors & Per-Theme Overrides:** Added automatic contrast-aware drawing defaults (`Auto Drawing Color` for Dark/Light themes) plus per-theme overrides for custom default **Drawing Line** and **Drawing Text** colors inside Chart Settings.
-- **Multi-Chart Slot Swapping:** Reorder chart panes effortlessly via header `◀`/`▶` swap buttons or Header Drag & Drop (kept non-destructive until explicit Save Layout).
-- **`Text` Drawing Selection & Rename + Floating Indicator Modals:** Renamed `"Text Annotation"` → `"Text"` across all 9 locales (1,068 synced keys), added exact bounding-box hit-testing and dashed selection outlines for `Text`, `Comment`, `Price Label`, and `Callout` tools, and upgraded Technical Indicators & Indicator Settings dialogs to draggable floating windows.
-- *(Includes all `v2.4.11` Drawing Tools Reorganization, Magnet OHLC Snapping Engine & CAD-Standard Floating Settings features.)*
+- **Advance R:R (`default 3`) → Auto TP Calculation (Quick Trade, New Order & Pending Order):** Added a shared **R:R (`1 : 3` default)** numeric input inside the **Advance ATR Risk** panel across **Quick Trade HUD**, **New Order (Market)**, and **Pending Order (Limit/Stop)**, persisted via `localStorage` (`app28_quick_adv_rr`). Displays live **TP (`R×SL`)** distance and **Est. Profit**, adds a one-click **`+SL/TP`** button (applies Req. Lot, ATR SL, and R:R-derived TP in both Distance and Pending Price modes) alongside `Use Lot` and `+SL`, plus a quick **`→ TP`** button to compute and populate TP directly from any manually entered SL.
+- **Auto-Minimize App & Foreground Installer Handoff during In-App Upgrades:** Upgraded `/api/app/install-update` (`backend/update_service.py`) and `QuantDeck_Standalone_Setup.exe` (`SetupForm.BringToFrontForce()`) so clicking **Launch Installer & Upgrade** automatically minimizes the QuantDeck workstation window to the Taskbar and forces the Setup/SmartScreen window straight to the foreground via 64-bit Win32 APIs (`AllowSetForegroundWindow`, `ShowWindowAsync(SW_MINIMIZE)`, `SetWindowPos` TopMost pulse, and `AttachThreadInput` + `SetForegroundWindow`), while keeping the previous workspace safely restorable if canceled.
+- *(Includes all `v2.4.12` Full-App Native Windows Snapshot, Local Under-Chart Image Uploads (30% opacity / Send to Back default), Multi-Chart & `D3` Drawing Persistence, Theme-Adaptive Drawing Colors & Multi-Chart Slot Swapping features.)*
 
 ---
 
@@ -69,8 +65,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-D8130A78F30B1308B1D01228B57C246B52C6D3060F9C1A520E0EF93BC2E2066E  QuantDeck_Standalone_Release.zip
-80FC11A66828A3269D015CA16504967901C56737A9F2C02FD566A3BE4B71DFE4  QuantDeck_Standalone_Setup.exe
+412076B0692C4554B979C3CF350EE476F21FDBEBD7D9835D0A10690F71FBF20F  QuantDeck_Standalone_Release.zip
+AA44D8FFBA055F5D4E17A62513725B33126D4B67C50082FC74922D87C700E320  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
