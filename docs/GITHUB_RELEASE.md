@@ -1,4 +1,4 @@
-# QuantDeck v2.4.14 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.15 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -26,11 +26,12 @@
 
 ---
 
-## ✨ What's New in v2.4.14
+## ✨ What's New in v2.4.15
 
-- **Order Lines Preserved Across Theme, Chart Style & Price Scale Switches:** Fixed a bug where open position & pending order lines (Entry / SL / TP) and chart badges vanished when switching chart themes (requiring `F5` to recover). Guarded redundant `setPriceScalePosition(...)` calls so theme changes no longer destroy/recreate `mainSeries` or reset viewport zoom, and added `ChartEngine.onMainSeriesChanged(...)` auto-rebind + `qd_theme_changed` recovery so `PositionOverlayManager` always stays attached across all single-chart and multi-chart slots.
-- **Theme-Harmonized Advance R:R Panel (Dark & Light Themes):** Updated the Advance ATR Risk `R:R` row, input field, `TP` / `Est. Profit` metrics, and `Use Lot` / `+SL` / `+SL/TP` / `→ TP` action buttons across Quick Trade HUD, New Order, and Pending Order modals with full `body.light-theme` and Dark Theme palette parity.
-- *(Includes all `v2.4.13` Advance R:R (`default 3`) Auto-TP Calculation & Auto-Minimize Foreground Installer Handoff, plus `v2.4.12` Full-App Snapshot, Local Under-Chart Image Uploads & Multi-Chart Drawing Persistence features.)*
+- **Broker Reconnection Resilience & Grace Period (`cTrader` & `SimpleFX`):** Added an `asyncio.Lock` + auto-retry + `401` retry in `SimpleFXClient` and fixed `CTraderDataSource.connect()` dead-socket auth sends, plus a 12-second `is_reconnecting` grace window across `OrderRouter`, `PositionReconciler`, Toolbox, and Quick Trade HUD so transient network drops show an amber `Reconnecting...` state while preserving active positions instead of flashing `Connection Problem`.
+- **Minimal Theme-Adaptive Order / Pending Lines & Redesigned Settings Modal:** Upgraded chart position & pending order lines to crisp `1px` minimal styling with translucent theme-adaptive badges anchored near the price axis (`right-canvas`), hover-reveal Drag/Settings controls, live/TP/SL `R-Multiple` (`+3.0R`, `-1.0R`, `BE`), separate Pending styling (`BUY LMT` / `SELL STP`), Auto-Theme palettes across all 7 themes + Custom override, and a fully Light/Dark theme-aware `Position Lines & Order Settings` modal with Live Preview.
+- **Startup Layout Preference (`On Startup: 1 Chart | Last Session`):** Added a segmented `1 Chart` / `Last Session` startup toggle inside the `⊞ Workspace & Layout` flyout, backed by an isolated `_last_session.json` snapshot (never pollutes or overwrites Saved Workspaces) with safe fallback to `1 Chart`.
+- *(Includes all `v2.4.14` Order Lines Theme Persistence Fix & Advance R:R Theme Polish, plus `v2.4.13` Advance R:R Auto-TP Calculation & Auto-Minimize Foreground Installer Handoff.)*
 
 ---
 
@@ -65,8 +66,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-333505C85DBD7B389110C79983D8CEE090713DE7966BE059AAF406D84509E655  QuantDeck_Standalone_Release.zip
-FAEF3DA0F7AF3F9757ED9171873AAEB5BEEBF455B7EC83E78A47D2EA45E0C948  QuantDeck_Standalone_Setup.exe
+22B1CBE5C6059D4FB738B3C5445C60DADB37973546CF5166121D4FC50A702501  QuantDeck_Standalone_Release.zip
+BA450EA6C24F15C63CB7649B7D6D8408DDDB0792C51B728F6D07FCFA0C8FFAE3  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
