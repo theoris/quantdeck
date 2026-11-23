@@ -1,4 +1,4 @@
-# QuantDeck v2.4.13 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.14 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -26,11 +26,11 @@
 
 ---
 
-## ✨ What's New in v2.4.13
+## ✨ What's New in v2.4.14
 
-- **Advance R:R (`default 3`) → Auto TP Calculation (Quick Trade, New Order & Pending Order):** Added a shared **R:R (`1 : 3` default)** numeric input inside the **Advance ATR Risk** panel across **Quick Trade HUD**, **New Order (Market)**, and **Pending Order (Limit/Stop)**, persisted via `localStorage` (`app28_quick_adv_rr`). Displays live **TP (`R×SL`)** distance and **Est. Profit**, adds a one-click **`+SL/TP`** button (applies Req. Lot, ATR SL, and R:R-derived TP in both Distance and Pending Price modes) alongside `Use Lot` and `+SL`, plus a quick **`→ TP`** button to compute and populate TP directly from any manually entered SL.
-- **Auto-Minimize App & Foreground Installer Handoff during In-App Upgrades:** Upgraded `/api/app/install-update` (`backend/update_service.py`) and `QuantDeck_Standalone_Setup.exe` (`SetupForm.BringToFrontForce()`) so clicking **Launch Installer & Upgrade** automatically minimizes the QuantDeck workstation window to the Taskbar and forces the Setup/SmartScreen window straight to the foreground via 64-bit Win32 APIs (`AllowSetForegroundWindow`, `ShowWindowAsync(SW_MINIMIZE)`, `SetWindowPos` TopMost pulse, and `AttachThreadInput` + `SetForegroundWindow`), while keeping the previous workspace safely restorable if canceled.
-- *(Includes all `v2.4.12` Full-App Native Windows Snapshot, Local Under-Chart Image Uploads (30% opacity / Send to Back default), Multi-Chart & `D3` Drawing Persistence, Theme-Adaptive Drawing Colors & Multi-Chart Slot Swapping features.)*
+- **Order Lines Preserved Across Theme, Chart Style & Price Scale Switches:** Fixed a bug where open position & pending order lines (Entry / SL / TP) and chart badges vanished when switching chart themes (requiring `F5` to recover). Guarded redundant `setPriceScalePosition(...)` calls so theme changes no longer destroy/recreate `mainSeries` or reset viewport zoom, and added `ChartEngine.onMainSeriesChanged(...)` auto-rebind + `qd_theme_changed` recovery so `PositionOverlayManager` always stays attached across all single-chart and multi-chart slots.
+- **Theme-Harmonized Advance R:R Panel (Dark & Light Themes):** Updated the Advance ATR Risk `R:R` row, input field, `TP` / `Est. Profit` metrics, and `Use Lot` / `+SL` / `+SL/TP` / `→ TP` action buttons across Quick Trade HUD, New Order, and Pending Order modals with full `body.light-theme` and Dark Theme palette parity.
+- *(Includes all `v2.4.13` Advance R:R (`default 3`) Auto-TP Calculation & Auto-Minimize Foreground Installer Handoff, plus `v2.4.12` Full-App Snapshot, Local Under-Chart Image Uploads & Multi-Chart Drawing Persistence features.)*
 
 ---
 
@@ -65,8 +65,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-412076B0692C4554B979C3CF350EE476F21FDBEBD7D9835D0A10690F71FBF20F  QuantDeck_Standalone_Release.zip
-AA44D8FFBA055F5D4E17A62513725B33126D4B67C50082FC74922D87C700E320  QuantDeck_Standalone_Setup.exe
+333505C85DBD7B389110C79983D8CEE090713DE7966BE059AAF406D84509E655  QuantDeck_Standalone_Release.zip
+FAEF3DA0F7AF3F9757ED9171873AAEB5BEEBF455B7EC83E78A47D2EA45E0C948  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
