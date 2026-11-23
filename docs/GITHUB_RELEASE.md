@@ -1,4 +1,4 @@
-# QuantDeck v2.4.15 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.16 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -26,12 +26,13 @@
 
 ---
 
-## ✨ What's New in v2.4.15
+## ✨ What's New in v2.4.16
 
-- **Broker Reconnection Resilience & Grace Period (`cTrader` & `SimpleFX`):** Added an `asyncio.Lock` + auto-retry + `401` retry in `SimpleFXClient` and fixed `CTraderDataSource.connect()` dead-socket auth sends, plus a 12-second `is_reconnecting` grace window across `OrderRouter`, `PositionReconciler`, Toolbox, and Quick Trade HUD so transient network drops show an amber `Reconnecting...` state while preserving active positions instead of flashing `Connection Problem`.
-- **Minimal Theme-Adaptive Order / Pending Lines & Redesigned Settings Modal:** Upgraded chart position & pending order lines to crisp `1px` minimal styling with translucent theme-adaptive badges anchored near the price axis (`right-canvas`), hover-reveal Drag/Settings controls, live/TP/SL `R-Multiple` (`+3.0R`, `-1.0R`, `BE`), separate Pending styling (`BUY LMT` / `SELL STP`), Auto-Theme palettes across all 7 themes + Custom override, and a fully Light/Dark theme-aware `Position Lines & Order Settings` modal with Live Preview.
-- **Startup Layout Preference (`On Startup: 1 Chart | Last Session`):** Added a segmented `1 Chart` / `Last Session` startup toggle inside the `⊞ Workspace & Layout` flyout, backed by an isolated `_last_session.json` snapshot (never pollutes or overwrites Saved Workspaces) with safe fallback to `1 Chart`.
-- *(Includes all `v2.4.14` Order Lines Theme Persistence Fix & Advance R:R Theme Polish, plus `v2.4.13` Advance R:R Auto-TP Calculation & Auto-Minimize Foreground Installer Handoff.)*
+- **DNS-Resilient IPv4 + Direct-DNS + Sticky-IP Broker Protection (`SimpleFX` & `cTrader`):** Added a shared `ResilientDNSResolver` (`connection/dns_resilience.py`) to eliminate `[getaddrinfo failed]` and Windows DNS Client Event ID 1014 timeouts during trading:
+  - Enforces IPv4-first resolution (`socket.AF_INET`) and extends `aiohttp` DNS caching from `10s` to `600s` via `ResilientAiohttpResolver` while preserving full TLS SNI & certificate verification.
+  - Falls back automatically to direct UDP DNS (`8.8.8.8`, `1.1.1.1`, `8.8.4.4`) and Cloudflare DoH (`1.1.1.1`) whenever OS DNS stalls, plus a 24-hour in-memory & 7-day persistent `%LOCALAPPDATA%\QuantDeck\dns_cache.json` sticky-IP cache with startup prewarming.
+  - Installs a resilient `GAIResolver` directly onto the Twisted reactor for `cTrader` Open API (`live.ctraderapi.com` / `demo.ctraderapi.com`) and distinguishes transient OAuth refresh network/DNS errors from genuine token revocations.
+- *(Includes all `v2.4.15` Broker Reconnection Grace Period, Minimal Theme-Adaptive Order / Pending Lines, and `On Startup: 1 Chart | Last Session` Layout Preference, plus `v2.4.14` & `v2.4.13` improvements.)*
 
 ---
 
@@ -66,8 +67,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-22B1CBE5C6059D4FB738B3C5445C60DADB37973546CF5166121D4FC50A702501  QuantDeck_Standalone_Release.zip
-BA450EA6C24F15C63CB7649B7D6D8408DDDB0792C51B728F6D07FCFA0C8FFAE3  QuantDeck_Standalone_Setup.exe
+873A20FE36E1118675F01D3018BB97825C568B14DA82D40853DFC4008F062760  QuantDeck_Standalone_Release.zip
+0102E823FE118E50122C76EC140E3C0AB674AEDE0BDA9B8294FDF5EED99FADE5  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
