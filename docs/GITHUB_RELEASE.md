@@ -1,4 +1,4 @@
-# QuantDeck v2.4.18 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.19 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -23,6 +23,18 @@
 
 <!-- Workstation Preview Screenshot / Demo GIF -->
 <!-- ![QuantDeck Multi-Broker Workstation](https://raw.githubusercontent.com/theoris/quantdeck/main/docs/assets/quantdeck_preview.png) -->
+
+---
+
+## ✨ What's New in v2.4.19
+
+- **Authoritative Broker Volume Specs & Human-Readable Error Translation (`ctrader_source.py` + `ctrader_client.py` + `router.py`):**
+  - Added non-blocking cTrader symbol specification lookup via `ProtoOASymbolByIdReq`/`ProtoOASymbolByIdRes` (`payloadType 2116/2117`), exposing real `min_lot`, `step_lot`, `max_lot`, `contract_size`, and `digits` (plus extended index symbol aliases such as `NAS100`, `USTEC`, `US100`, `NDX100`, `SPX500`, `US500`, `US30`, `DOW`).
+  - Wired `OrderRouter.get_symbol_specs()` with authoritative broker metadata and a 300s TTL cache (preserving `0.01` default fallback for standard FX/Gold and `1.0` for stocks when no custom broker minimum is specified), added pre-flight order volume min/max/step validation in `OrderRouter.place_order()`, surfaced cTrader `ProtoOAOrderErrorEvent (2132)` rejections cleanly, and added `_translate_broker_error()` for clear, actionable volume/margin/market status messages.
+- **Dynamic Min-Lot Sync Across Order Panels, Live Bot Runner, and Price & PnL Ruler (`asset-specs.ts` + `drawing-manager.ts` + `quick-trade-hud.ts` + `orders-panel.ts` + `live-trading-modal.ts`):**
+  - Centralized `getSymbolLotConstraints()`, `normalizeLotToConstraints()`, and `validateLotAgainstConstraints()` in `asset-specs.ts` with `qd_symbol_specs_updated` change propagation from `main.ts` and `layout-manager.ts`.
+  - Updated **Quick Trade HUD**, **New Order Modal**, and **Live Auto-Trading Modal** with live `(Min: ...)` hints, dynamic lot `min`/`step`/`max` attributes, adaptive quick-lot chips, and pre-flight validation.
+  - Updated **Price & PnL Ruler / Risk-Reward Settings** (`drawing-manager.ts`) and inline property bar lot controls to default to `0.01` while automatically honoring each symbol/broker's detected `min_lot` (such as `1.0` on cTrader `NAS100`).
 
 ---
 
@@ -81,8 +93,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-5F65D56CF85F408B78916F6AE0B6817E1ED827288D0993CD77A6409BD755DF09  QuantDeck_Standalone_Release.zip
-02C149C81A41ACE2CE1017D72B93685C498E805F321E7646ECEAAE406AB52A43  QuantDeck_Standalone_Setup.exe
+967C6E92364C616540924A421F6890BCE3B6B14808D4E8F815AC938E65EAD4FC  QuantDeck_Standalone_Release.zip
+4E93584F66667F5256320A1B6735A56198632348E45D83BBCA2C6E332861E4A8  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
