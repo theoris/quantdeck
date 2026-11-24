@@ -1,4 +1,4 @@
-# QuantDeck v2.4.17 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.18 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -25,6 +25,20 @@
 <!-- ![QuantDeck Multi-Broker Workstation](https://raw.githubusercontent.com/theoris/quantdeck/main/docs/assets/quantdeck_preview.png) -->
 
 ---
+
+## ✨ What's New in v2.4.18
+
+- **Execution Automation & Stepped-SL Loop Resilience (`trade_manager.py` + `ctrader_client.py` + `reconciler.py`):**
+  - Eliminated a silent monitoring loop termination bug where cancelling a shared `CTraderClient` in-flight reconcile future propagated `asyncio.CancelledError` into `TradeAutomationManager._monitor_loop()` without error logs.
+  - Hardened `CTraderClient.get_open_positions()` single-flight waiting with `asyncio.shield()`, owner-checked `_pending["reconcile"]` cleanup, `CancelledError` isolation for waiting callers, and cache preservation when reconcile resolves empty (`None`), plus stopped `ProtoOAOrderErrorEvent (2132)` from aborting active reconcile futures and made `close_position()` cache-aware so market closes do not trigger spurious pending-order `ORDER_NOT_FOUND` errors.
+  - Widened `PositionReconciler` per-broker timeout from `6.0s` to `9.0s` (above cTrader's internal `8.0s` timeout) and guarded `_reconcile_loop()` and `_monitor_loop()` against leaked child `CancelledError` exceptions using `Task.cancelling()`, paired with an `_ensure_loop_running()` self-healing watchdog on rule access/updates.
+  - Offloaded synchronous data-source `get_tick()` lookups in `TradeAutomationManager` to worker threads (`asyncio.to_thread` with `2.5s` timeout) and ensured Ratchet Guard step completions persist immediately to `trade_rules.json` and broadcast `trade_rule_updated`.
+- **WebSocket Broadcast & SimpleFX Stability (`ws_manager.py` + `simplefx_client.py`):**
+  - Added a `2.0s` `asyncio.wait_for` timeout across all WebSocket broadcast helpers (`broadcast_bar_update`, `broadcast_execution_event`, `broadcast_tick`) to automatically evict hung clients instead of blocking execution automation.
+  - Added a `10s` failure backoff and `5.0s` request timeout on `SimpleFXClient.fetch_account_balance()` plus explicit exception type/detail logging (`type(ex).__name__: repr(ex)`) for blank `TimeoutError` messages.
+- **Unified Chart Order & SL/TP Sign Formatting (`frontend/src/chart/position-overlay.ts`):**
+  - Added shared `formatSignedUsd()` and `formatSignedDist()` formatters across price-scale axis titles, canvas badges, hover tooltips, and drag previews so open and pending order SL/TP labels display matching signs on both left and right sides (e.g. `+$9.00` / `+90.0p` when SL trails into profit).
+- *(Includes all `v2.4.17` cTrader Zero-Zombie Socket & Handshake Isolation and SimpleFX Single-Task WebSocket Guard improvements, plus `v2.4.16`–`v2.4.13` updates.)*
 
 ## ✨ What's New in v2.4.17
 
@@ -67,8 +81,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-8838D5158664BAA8531630AF25925CE20FC5B5BA392844EF6285574B01F8C949  QuantDeck_Standalone_Release.zip
-119274FDD103D43D5C8C239FFF77E1E64B885F0DA582C598BDB967D78E0B3F94  QuantDeck_Standalone_Setup.exe
+8A678D3971CEA03F4EDCA18D2AFA19574C8B66AA46FBAACBA45E76C1657DAF5E  QuantDeck_Standalone_Release.zip
+DF21F996E304D5EF41AF537842CB66BC70B34C8B649ABEC1032FDE2A1933DD39  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
