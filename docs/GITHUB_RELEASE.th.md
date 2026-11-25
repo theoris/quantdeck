@@ -1,4 +1,4 @@
-# QuantDeck v2.4.19 — เวิร์กสเตชันกราฟวิเคราะห์เชิงสถาบันและระบบส่งคำสั่งเทรดหลายโบรกเกอร์พร้อมกัน
+# QuantDeck v2.4.20 — เวิร์กสเตชันกราฟวิเคราะห์เชิงสถาบันและระบบส่งคำสั่งเทรดหลายโบรกเกอร์พร้อมกัน
 
 > **รวมทุกฟังก์ชันบนเดสก์ท็อปในแอปพลิเคชันเดียว ทั้งการดูกราฟขั้นสูง แบ็กเทสต์กลยุทธ์ และบอทเทรดอัตโนมัติ** ครอบคลุม Forex, ทองคำ (Gold), คริปโตเคอร์เรนซี, ดัชนีระดับโลก, หุ้นสหรัฐฯ รวมถึงหุ้นไทย SET และอนุพันธ์ TFEX  
 > เชื่อมต่อ **MT5, cTrader และ SimpleFX** ได้พร้อมกันบนหน้าจอเดียว วาดกราฟด้วยเครื่องมือวิเคราะห์ระดับสถาบันกว่า 70 ชนิด ทำแบ็กเทสต์พร้อมระบบ Optuna Optimizer รันบอทเทรดอัตโนมัติ 24/7 และจัดการความเสี่ยงพอร์ตโฟลิโอผ่าน Execution Toolbox แบบรวมศูนย์
@@ -206,6 +206,22 @@ QuantDeck/
 ```
 
 > 💡 **การสำรองข้อมูลสำคัญ:** โฟลเดอร์ที่มีสัญลักษณ์ **✏️** คือส่วนที่เก็บข้อมูลส่วนตัว เส้นวาด กลยุทธ์ และการตั้งค่าของคุณ ควรก๊อบปี้สำรองโฟลเดอร์เหล่านี้ไว้ก่อนอัปเดตโปรแกรมเวอร์ชันใหม่
+
+---
+
+## 🧩 คู่มือการสร้าง Indicator & Strategy ด้วย AI (AI Blueprints)
+
+สามารถส่งไฟล์คู่มือและแม่แบบ Prompt เหล่านี้แนบให้ AI (ChatGPT, Claude, Gemini, Cursor) เพื่อสร้างตัวชี้วัดและบอทเทรดตามมาตรฐาน QuantDeck ได้ทันที (หรือเปิดใช้งานจากโฟลเดอร์ `QuantDeck/docs/` ในเครื่อง):
+
+### 1. คู่มือการทำ Indicator (`custom_indicators/`)
+- [`docs/custom_indy.md`](https://github.com/theoris/quantdeck/blob/main/docs/custom_indy.md) — คู่มือสถาปัตยกรรม Custom Indicator SDK ฉบับสมบูรณ์
+- [`docs/prompt_indy.md`](https://github.com/theoris/quantdeck/blob/main/docs/prompt_indy.md) — ชุดคำสั่ง Prompt สำหรับสั่ง AI สร้าง Indicator (9 ภาษา)
+- [`docs/prompt_indy_nocode.md`](https://github.com/theoris/quantdeck/blob/main/docs/prompt_indy_nocode.md) — แม่แบบ Prompt แบบโต้ตอบถาม-ตอบสำหรับผู้ไม่เขียนโค้ด (No-Code)
+
+### 2. คู่มือการทำ Strategy (`custom_strategies/`)
+- [`docs/custom_strategy.md`](https://github.com/theoris/quantdeck/blob/main/docs/custom_strategy.md) — คู่มือสถาปัตยกรรม Python Strategy SDK และกฎ Zero-Lookahead ฉบับสมบูรณ์
+- [`docs/prompt_strategy.md`](https://github.com/theoris/quantdeck/blob/main/docs/prompt_strategy.md) — ชุดคำสั่ง Prompt สำหรับสั่ง AI สร้าง Strategy (9 ภาษา)
+- [`docs/prompt_strategy_nocode.md`](https://github.com/theoris/quantdeck/blob/main/docs/prompt_strategy_nocode.md) — แม่แบบ Prompt แบบโต้ตอบถาม-ตอบสำหรับผู้ไม่เขียนโค้ด (No-Code)
 
 ---
 

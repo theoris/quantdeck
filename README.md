@@ -169,6 +169,22 @@ Simply close the workstation window, or run **`Kill_QuantDeck.exe`** at any time
 
 ---
 
+## 🧩 Custom Indicator & Strategy Guides (AI Blueprints)
+
+Build your own TypeScript/JS/Python indicators and automated strategies in minutes by attaching these official blueprints and prompt templates directly into any AI chat (ChatGPT, Claude, Gemini, Cursor):
+
+### 1. Custom Indicator Guide (`custom_indicators/`)
+- [`docs/custom_indy.md`](https://github.com/theoris/quantdeck/blob/main/docs/custom_indy.md) — Complete Custom Indicator SDK specification, rendering rules, and AI blueprint
+- [`docs/prompt_indy.md`](https://github.com/theoris/quantdeck/blob/main/docs/prompt_indy.md) — Multilingual AI prompt templates (9 languages) for building indicators
+- [`docs/prompt_indy_nocode.md`](https://github.com/theoris/quantdeck/blob/main/docs/prompt_indy_nocode.md) — Guided No-Code prompt templates (interactive Q&A for non-coders)
+
+### 2. Custom Strategy Guide (`custom_strategies/`)
+- [`docs/custom_strategy.md`](https://github.com/theoris/quantdeck/blob/main/docs/custom_strategy.md) — Complete Python Strategy SDK specification, Zero-Lookahead rules & AI blueprint
+- [`docs/prompt_strategy.md`](https://github.com/theoris/quantdeck/blob/main/docs/prompt_strategy.md) — Multilingual AI prompt templates (9 languages) for building strategies
+- [`docs/prompt_strategy_nocode.md`](https://github.com/theoris/quantdeck/blob/main/docs/prompt_strategy_nocode.md) — Guided No-Code prompt templates (interactive Q&A for non-coders)
+
+---
+
 ## 📁 Package Directory Structure
 
 ```text

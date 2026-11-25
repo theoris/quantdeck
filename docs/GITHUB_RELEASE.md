@@ -1,4 +1,4 @@
-# QuantDeck v2.4.19 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.20 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -23,6 +23,21 @@
 
 <!-- Workstation Preview Screenshot / Demo GIF -->
 <!-- ![QuantDeck Multi-Broker Workstation](https://raw.githubusercontent.com/theoris/quantdeck/main/docs/assets/quantdeck_preview.png) -->
+
+---
+
+## ✨ What's New in v2.4.20
+
+- **Optimizer ↔ Backtest Parameter Parity & Safe Boolean Coercion (`base.py` + `multi_base.py` + `optimizer.py` + `engine.py`):**
+  - Fixed a silent mismatch where `"bool"` strategy parameters (e.g., `tp_at_poc: false`, `close_opposite: false`) serialized as JSON strings from the Strategy Panel UI and evaluated as `bool("false") == True` in Python during single backtests while Optuna used native `False`.
+  - Added `coerce_bool()` and `coerce_strategy_params()` to `backend/strategies/base.py` (automatically invoked in `BaseStrategy.__init__()` and `BaseMultiAssetStrategy.__init__()`) and applied `coerce_bool()` across `optimizer.py`, `engine.py`, `live_engine.py`, and `external_bot_runner.py`.
+  - Updated Backtest Engine (`engine.py`) Signal Reversal exit handling to explicitly honor `self.params["close_opposite"]` when declared by a strategy, matching Live Engine and External Bot Runner behavior.
+- **Typed Strategy Inputs, Boolean Search Space & State Persistence (`strategy-panel.ts` + `live-trading-modal.ts`):**
+  - Rendered `"bool"` parameters as native `True`/`False` dropdowns and typed `"number"`/`"int"`/`"float"`/`"select"` inputs in both `StrategyPanel` (In-Chart & External) and `LiveTradingModal`, returning exact JSON types from `collectParams()`.
+  - Exposed `"bool"` parameters inside the Optuna Parameter Search Space UI with `Auto-sweep [True, False]` and `🔒 Fix` constant lock support.
+  - Preserved `Initial Capital ($)`, `Spread / Cost ($)`, and `Bar Count` state across **`✔ Apply & Test`** and tab switches instead of resetting back to `10000` / `0.0`.
+- **Custom Strategy AI Authoring Guidelines (`docs/custom_strategy.md` + `template_strategy.py`):**
+  - Documented supported `"type"` fields (`"bool"`, `"int"`, `"float"`, `"number"`, `"select"`, `"text"`), added strict prohibitions against raw `bool(...)` string coercion and bar-index modulo phase drift (`(i - warmup) % step` when `step > 1`), and aligned `Section 9` verification checklist.
 
 ---
 
@@ -93,8 +108,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-967C6E92364C616540924A421F6890BCE3B6B14808D4E8F815AC938E65EAD4FC  QuantDeck_Standalone_Release.zip
-4E93584F66667F5256320A1B6735A56198632348E45D83BBCA2C6E332861E4A8  QuantDeck_Standalone_Setup.exe
+2134BF3E81CD8CE319D30567DCB7D3FF3E62B4581E0238EAAFC61A24FDE384E0  QuantDeck_Standalone_Release.zip
+AE3A2125E0D1D606B507774CED6E01957A27FF0166DEB587F93FDAD8E1ED3400  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
@@ -202,6 +217,22 @@ Choose the payment channel that best suits you:
 
 ### Closing QuantDeck
 Simply close the workstation window, or run **`Kill_QuantDeck.exe`** at any time to instantly stop all background services and free up port 8765.
+
+---
+
+## 🧩 Custom Indicator & Strategy Guides (AI Blueprints)
+
+Attach these official specs and AI prompt templates directly in ChatGPT, Claude, Gemini, or Cursor (or find them locally inside `QuantDeck/docs/`):
+
+### 1. Custom Indicator Guide (`custom_indicators/`)
+- [`docs/custom_indy.md`](https://github.com/theoris/quantdeck/blob/main/docs/custom_indy.md) — Complete Custom Indicator SDK specification, rendering rules & AI blueprint
+- [`docs/prompt_indy.md`](https://github.com/theoris/quantdeck/blob/main/docs/prompt_indy.md) — Multilingual AI prompt templates (9 languages) for building indicators
+- [`docs/prompt_indy_nocode.md`](https://github.com/theoris/quantdeck/blob/main/docs/prompt_indy_nocode.md) — Guided No-Code prompt templates (interactive Q&A for non-coders)
+
+### 2. Custom Strategy Guide (`custom_strategies/`)
+- [`docs/custom_strategy.md`](https://github.com/theoris/quantdeck/blob/main/docs/custom_strategy.md) — Complete Python Strategy SDK specification, Zero-Lookahead rules & AI blueprint
+- [`docs/prompt_strategy.md`](https://github.com/theoris/quantdeck/blob/main/docs/prompt_strategy.md) — Multilingual AI prompt templates (9 languages) for building strategies
+- [`docs/prompt_strategy_nocode.md`](https://github.com/theoris/quantdeck/blob/main/docs/prompt_strategy_nocode.md) — Guided No-Code prompt templates (interactive Q&A for non-coders)
 
 ---
 
