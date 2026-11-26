@@ -1,4 +1,4 @@
-# QuantDeck v2.4.20 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.21 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -23,6 +23,16 @@
 
 <!-- Workstation Preview Screenshot / Demo GIF -->
 <!-- ![QuantDeck Multi-Broker Workstation](https://raw.githubusercontent.com/theoris/quantdeck/main/docs/assets/quantdeck_preview.png) -->
+
+---
+
+## ✨ What's New in v2.4.21
+
+- **CAD Measurement Tools Shift-Snap Alignment (`drawing-manager.ts`):**
+  - Enabled Shift-key 45° / 0° / 90° angle snapping (with live `📐 XX°` badge) across all 6 CAD dimension tools (`dim_linear`, `dim_aligned`, `dim_radial`, `dim_diameter`, `dim_angular`, `dim_ordinate`) during creation, live hover preview, and selected handle dragging.
+  - Added specialized vertex-anchored snapping for `dim_angular` Point 3 / Arm 2 dragging so both arms lock cleanly relative to the `Vertex` point (`points[0]`) rather than `Arm 1`.
+- **AI Authoring Quick-Guide & 1-Click Spec Downloads (`indicator-modal.ts` + `strategy-panel.ts` + `guide-links.ts` + `backend/main.py`):**
+  - Added a compact AI Quick-Guide action strip directly above `Open Folder` in the Custom Indicators tab and above the `In-Chart` / `External` tabs in Strategy Workstation, featuring an interactive `?` workflow tooltip, 1-click `.md` specification downloads (`custom_indy.md` / `custom_strategy.md` via `/api/docs/download/{filename}` with GitHub raw fallback), No-Code AI Prompt links, and YouTube video tutorial links for both Custom Indicators and Custom Strategies.
 
 ---
 
@@ -108,8 +118,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-2134BF3E81CD8CE319D30567DCB7D3FF3E62B4581E0238EAAFC61A24FDE384E0  QuantDeck_Standalone_Release.zip
-AE3A2125E0D1D606B507774CED6E01957A27FF0166DEB587F93FDAD8E1ED3400  QuantDeck_Standalone_Setup.exe
+CC3B0AD61D5A590327F778AF22044E0B28638ACF4AFFD2808568820C912946B1  QuantDeck_Standalone_Release.zip
+935FF6304B960776F7F0C89E9F70C6C813D7AA91D79AA1D84C2A9FA960E9B825  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:
