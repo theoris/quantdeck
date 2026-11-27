@@ -26,12 +26,14 @@ Welcome to the official **QuantDeck Custom Strategy SDK & AI Prompting Reference
 3. **Lot Sizing Decision**:
    - *User did NOT specify lot sizing logic* ➔ **Always** set `custom_sizing = True` and include the standard `_calculate_lot(entry_price, sl_price)` helper (Section 3.3) so both `"Fixed Lot"` and `"% Risk per Trade"` modes in the QuantDeck UI work out-of-the-box.
    - *User explicitly asked for custom/martingale/volatility lot sizing* ➔ Set `custom_sizing = True` and implement their custom formula inside `sizes`.
-4. **Position Management & Concurrency Decision**:
-   - *User did NOT ask for `max_positions`, pyramid entries, or cooldown bar spacing* ➔ **Keep it simple!** Generate entries with a clean loop or vectorized signals without tracking an internal `active_positions` list, and do **NOT** add `self.is_live` concurrency checks.
-   - *User asked for `max_positions`, pyramid limits, or `min_bar_spacing` cooldowns* ➔ Implement the stateful tracking loop (Section 7.3) and **MUST** gate the simulated `active_positions` count with `if self.is_live:` vs `else:`.
-5. **Opposite Signal Reversal Decision (`close_opposite`)**:
-   - *Trend-following / Reversal strategies (e.g., MA crossover, SuperTrend flip, MACD cross)* ➔ Include `{"key": "close_opposite", "label": "Close on Opposite Signal", "type": "bool", "default": True}` in `get_param_defs()`. QuantDeck's Backtester (`engine.py`), Optimizer (`optimizer.py`), Live Engine (`live_engine.py`), and External Bot Runner all read `self.params["close_opposite"]` identically.
-   - *Fixed-target scalping / Mean-reversion strategies (where trades should only exit at SL or TP)* ➔ Set `"close_opposite"` default to `False` (and NEVER omit it expecting hold-to-SL/TP, because legacy strategies without `close_opposite` reverse by default in Backtest).
+4. **Execution Mode Decision (Single-Order vs. Multi-Position / Grid / Basket)**:
+   - *Standard 1-trade-at-a-time strategies (no grid, no pyramiding, no partial/basket close)* ➔ Keep `multi_position = False` (default) and emit `1` / `-1` signals cleanly from `generate_signals(df)` without tracking an internal `active_positions` list.
+   - *Multi-Order / Grid / DCA / Pyramiding / Split-TP / Hedge / Basket / Partial-Close strategies (or conditional exits by age, layer, basket profit, or LIFO pruning)* ➔ Set **`multi_position = True`**, return **`"execution_mode": "multi"`** from `generate_signals(df)`, and implement **`on_bar(self, bar_idx, state)`** + optional **`check_intrabar_basket(self, state)`** per **Section 10**. Do NOT try to simulate concurrent orders or basket closes inside a single-position `signals` vector!
+   - *Legacy single-position `max_positions` cooldown note*: Section 7.3 only applies if you intentionally stay in single-signal mode (`multi_position = False`) and want bar spacing between sequential signal triggers; for true simultaneous orders, always use Section 10.
+5. **Opposite Signal Reversal & Optuna Efficiency**:
+   - *Single-order Trend / Reversal strategies* ➔ Include `{"key": "close_opposite", "label": "Close on Opposite Signal", "type": "bool", "default": True}` in `get_param_defs()`. QuantDeck's Backtester (`engine.py`), Optimizer (`optimizer.py`), Live Engine (`live_engine.py`), and External Bot Runner all read `self.params["close_opposite"]` identically.
+   - *Fixed-target scalping / Mean-reversion single-order strategies* ➔ Set `"close_opposite"` default to `False` (and NEVER omit it expecting hold-to-SL/TP, because legacy strategies without `close_opposite` reverse by default in Backtest).
+   - *Optuna Parameter Discipline*: Avoid creating too many unfixed `"select"` (multiple-choice) dropdowns unless clearly requested — focus on 3–6 high-impact numeric/boolean parameters so Optuna TPE converges efficiently instead of wasting trials across unused mode branches.
 6. **Swing High / Low, Pivot, Fractal, or Market Structure (BOS/CHoCH) Decision**:
    - *User mentions Swing High/Low, Pivot Points, Fractals, Support/Resistance zones, or SMC BOS/CHoCH* ➔ **Always** use the Confirmed Swing Pivot formula with confirmation lag (`.shift(swing_len)` over a `2 * swing_len + 1` window, Section 5.3) so there is zero future peeking.
 7. **Visual Overlays Decision**:
@@ -120,18 +122,19 @@ Create a QuantDeck Custom Python Strategy (.py) strictly following every rule in
 
 [Entry & Exit Logic]
 - <Describe BUY/SELL conditions, indicators, or paste Pine Script / rules>
+- Execution Architecture: <Single-Order OR Multi-Position (multi_position = True with on_bar + check_intrabar_basket for Grid / Pyramid / Split-TP / Partial Close)>
 - HTF Requirement (if any): <e.g., H1/H4 zero-lookahead resampling>
-- Reversal Mode: <close_opposite True/False>
+- Reversal Mode (Single-Order): <close_opposite True/False>
 
 [Risk & Position Sizing]
-- SL / TP: <e.g., ATR(14) * 1.5 SL, 2.0 RR TP>
-- Lot Sizing: <Default custom_sizing = True with _calculate_lot()>
-- Live Bot & News Guard Compatibility: <Stateless or synced via self.is_live / self.open_positions_count>
+- SL / TP: <e.g., ATR(14) * 1.5 SL, 2.0 RR TP, OR Basket Equity % TP/Hard SL>
+- Lot Sizing: <Default custom_sizing = True with _calculate_lot() OR equity-scaled layer sizing>
+- Live Bot & News Guard Compatibility: <Stateless or synced via state['open_positions'] / self.open_positions_count (never rely on p['layer'] in Live)>
 
 [Strict Output Requirements]
-- Subclass BaseStrategy with the try/except fallback, implement get_param_defs() & get_default_params().
+- Subclass BaseStrategy with the full try/except fallback (Section 8), implement get_param_defs() & get_default_params().
 - Use only pandas, numpy, math, and Python stdlib (no external TA or news libraries).
-- Verify against Section 9 before outputting.
+- Verify against Section 9 (and Section 10 if multi_position = True) before outputting.
 ```
 
 ---
@@ -613,14 +616,31 @@ import numpy as np
 from typing import Dict, Any, List, Optional
 
 try:
-    from backend.strategies.base import BaseStrategy
+    from backend.strategies.base import BaseStrategy, coerce_bool
 except ImportError:
+    def coerce_bool(val: Any, default: bool = False) -> bool:
+        if isinstance(val, bool):
+            return val
+        if val is None:
+            return default
+        if isinstance(val, (int, float)):
+            return False if np.isnan(val) else bool(val)
+        if isinstance(val, str):
+            s = val.strip().lower()
+            if s in ("true", "1", "yes", "y", "on", "t"):
+                return True
+            if s in ("false", "0", "no", "n", "off", "f", "", "none", "null"):
+                return False
+            return default
+        return bool(val)
+
     class BaseStrategy:
         name: str = "BaseStrategy"
         description: str = ""
         version: str = "1.0.0"
         author: str = "QuantDeck"
         custom_sizing: bool = False
+        multi_position: bool = False
 
         def __init__(self, params: Optional[Dict[str, Any]] = None):
             self.params = self.get_default_params()
@@ -634,6 +654,14 @@ except ImportError:
         @property
         def initial_capital(self) -> float:
             return float(self.context.get("initial_capital", 10000.0))
+
+        @property
+        def balance(self) -> float:
+            return float(self.context.get("balance", self.initial_capital))
+
+        @property
+        def equity(self) -> float:
+            return float(self.context.get("equity", self.balance))
 
         @property
         def lot_size(self) -> float:
@@ -689,6 +717,12 @@ except ImportError:
         @classmethod
         def get_default_params(cls) -> Dict[str, Any]:
             return {p["key"]: p.get("default") for p in cls.get_param_defs() if "key" in p}
+
+        def on_bar(self, bar_idx: int, state: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+            return None
+
+        def check_intrabar_basket(self, state: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+            return None
 
 
 class EmaRsiTrendStrategy(BaseStrategy):
@@ -947,4 +981,139 @@ Before presenting the generated `.py` file to the user, verify all 11 items:
 9. [ ] **Simplified Position Management**: Only includes `active_positions` / `self.is_live` concurrency tracking if the user requested `max_positions` or bar spacing cooldowns.
 10. [ ] **Output Dictionary Contract**: Returns `{"signals": pd.Series, "sl": pd.Series, "tp": pd.Series, "sizes": pd.Series, "overlays": dict}` aligned to `df.index`.
 11. [ ] **Zero-Division Safe Vectorized Math**: Never write `np.where(denom > 0, num / denom, 0.0)` (NumPy evaluates `num / denom` before filtering and emits `RuntimeWarning: divide by zero`). Always use `out = np.zeros_like(num, dtype=float); np.divide(num, denom, out=out, where=denom > 0)`.
-12. [ ] **Typed Parameters & Optimizer↔Backtest Parity**: Every `get_param_defs()` entry declares explicit `"type"` (`"bool"`, `"int"`, `"float"`, `"number"`, `"select"`, `"text"`), boolean flags are parsed safely via `_as_bool()` / `BaseStrategy` auto-coercion (never raw `bool(...)`), and rolling calculations avoid bar-index modulo phase drift (`(i - warmup) % step` with `step > 1`).
+12. [ ] **Typed Parameters & Optimizer↔Backtest Parity**: Every `get_param_defs()` entry declares explicit `"type"` (`"bool"`, `"int"`, `"float"`, `"number"`, `"select"`, `"text"`), boolean flags are parsed safely via `_as_bool()` / `coerce_bool()`, and rolling calculations avoid bar-index modulo phase drift (`(i - warmup) % step` with `step > 1`).
+13. [ ] **Multi-Order & Conditional Close Parity (If Applicable)**: If the strategy opens concurrent orders, pyramids, hedges, or uses conditional/partial/basket closes, it sets `multi_position = True`, returns `"execution_mode": "multi"` in **every** branch of `generate_signals(df)`, implements `on_bar(bar_idx, state)` (and optional `check_intrabar_basket(state)`), reads only `bar_idx` (never `bar_idx + 1`), and derives layers from live-guaranteed keys (`id`, `side`, `lot_size`, `entry_price`, `entry_time`, `pnl`) rather than `p["layer"]` or `p["tag"]`.
+
+---
+
+## 🕸️ Section 10: Multi-Position, Grid, Pyramiding & Conditional Close Engine (`multi_position = True`)
+
+QuantDeck's Backtester (`backend/backtest/engine.py`), Optuna Optimizer, In-Chart Live Engine (`live_engine.py`), and External Bot Runner natively execute **Multi-Position / Grid / Split-TP / Hedge / Basket Strategies** with identical zero-lookahead and mark-to-market equity tracking.
+
+### 10.1 Activation & Exact Bar Execution Order
+1. **Class Flags**: Set `multi_position = True` (and `custom_sizing = True` when managing per-leg/equity lot sizes) on your `BaseStrategy` subclass.
+2. **Precomputation (`generate_signals(df)`)**: Compute all indicators once in vectorized NumPy arrays onto `self._prep`, and **ALWAYS return `"execution_mode": "multi"`** (including in early warmup/invalid-param returns!).
+3. **Exact Order of Evaluation on Historical Bar `i`** *(mirrors Live ticks)*:
+   1. Individual leg `sl` / `tp` checked against bar `i` extremes (`bid_low`/`bid_high` for `LONG`, `ask_high`/`ask_low` for `SHORT`).
+   2. `check_intrabar_basket(open_state)` checks immediate basket close at bar `i` Open.
+   3. `on_bar(bar_idx = i - 1, open_state)` evaluates the **last completed bar** (`bar_idx`). **CRITICAL ZERO-LOOKAHEAD RULE:** Inside `on_bar`, `bar_idx` is ALREADY `i - 1` — read `self._prep[...][bar_idx]`, NEVER `bar_idx + 1`!
+   4. If the returned dict contains **both** closes (`close_scope` / `close_ids`) and new `orders`, QuantDeck executes **CLOSES FIRST**, recalculates post-close `equity`, and fills **NEW `orders` SECOND** at bar `i` Open (`ask_open` for `BUY`, `bid_open` for `SELL`).
+   5. `check_intrabar_basket(close_state)` checks basket thresholds again at bar `i` Close (and runs every ~2 seconds on real broker ticks in Live / External Bot mode).
+
+### 10.2 Guaranteed `state` & `open_positions` Schema (Backtest ↔ Live Parity)
+Every call to `on_bar(self, bar_idx, state)` and `check_intrabar_basket(self, state)` receives:
+
+| `state` Field | Type | Meaning |
+| :--- | :--- | :--- |
+| `balance` / `equity` | `float` | Current realized cash balance & live mark-to-market equity (`balance + floating_pnl`). |
+| `floating_pnl` | `float` | Net unrealized P&L across all open legs managed by this strategy/bot tag. |
+| `open_positions` | `List[Dict]` | Active leg list. Guaranteed live-safe keys per leg: `"id"` (`str`), `"type"` (`"LONG"`\|`"SHORT"`), `"side"` (`"BUY"`\|`"SELL"`), `"lot_size"` (`float`), `"entry_price"` (`float`), `"entry_time"` (`int` Unix sec), `"sl"` (`float`), `"tp"` (`float`), `"pnl"` (`float`). |
+| `open_count` / `buy_count` / `sell_count` | `int` | Total open legs, BUY legs, and SELL legs. |
+| `buy_lots` / `sell_lots` | `float` | Sum of open lots per side. |
+| `avg_entry_buy` / `avg_entry_sell` | `float` | Volume-weighted average entry price per side (`0.0` if side count is `0`). |
+| `effective_mult` / `digits` | `float`/`int` | Asset contract multiplier (`100` Gold, `100000` Forex, etc.) and symbol price decimals. |
+
+> ⚠️ **Live Restart Trap (Never Rely on `p["layer"]` or `p["tag"]`):** Backtest position dicts include `"layer"` and `"tag"`, but real broker APIs (`build_live_multi_state`) only guarantee standard position fields (`id`, `side`, `lot_size`, `entry_price`, `entry_time`, `sl`, `tp`, `pnl`). Always compute grid layer counts from `len(buy_legs)` / `len(sell_legs)` and anchor prices from `min(p["entry_price"] ...)` / `max(p["entry_price"] ...)`.
+
+### 10.3 Supported Return Directives (All Open & Conditional Close Modes)
+Return `None` to hold, or a `dict` combining any of these keys:
+
+| Pattern | Returned `dict` Example | Engine & Live Behavior |
+| :--- | :--- | :--- |
+| **Open 1 or N Legs (Grid / Split-TP / Hedge)** | `{"orders": [{"side": "BUY", "lot": 0.02, "sl": 0.0, "tp": 2665.0, "tag": "GB1"}, {"side": "BUY", "lot": 0.01, "sl": 0.0, "tp": 2680.0, "tag": "GB2"}]}` | Opens every valid order in `"orders"` sequentially at bar `i` Open (or live market). Keep `"tag"` short (`<= 8` chars; live comment truncates at 28 chars). |
+| **Close Entire Basket** | `{"close_scope": "ALL", "exit_reason": "Basket TP (+2.0% Eq)"}` | Closes every open BUY & SELL leg belonging to this strategy. |
+| **Close One Direction Only** | `{"close_scope": "BUY", "exit_reason": "BUY BE+ATR TP"}` | Closes only `"BUY"` (`"SELL"`) legs while leaving opposite-side hedge legs open. |
+| **Selective / Partial Leg Close (LIFO / Profit Trim / Time-Stop)** | `{"close_ids": [str(newest["id"]), str(worst["id"])], "exit_reason": "LIFO Prune"}` | Closes ONLY matching `p["id"]` positions (e.g., LIFO pair pruning, closing partial TP winner leg while letting runner hold, or time-closing legs where `bar_time - p["entry_time"] >= max_hold_sec`). |
+| **Atomic Flip / Replace in Same Bar** | `{"close_scope": "BUY", "exit_reason": "Trend Flip", "orders": [{"side": "SELL", "lot": 0.02, "sl": sl_p, "tp": tp_p, "tag": "S1"}]}` | Executes closes FIRST, updates post-close equity, then opens the new orders in the same bar. |
+
+### 10.4 Custom `"lot"` vs. UI `sizing_mode` & Live Restart Hygiene
+- **How `ord_spec["lot"]` is used:**
+  - When UI **Sizing Mode** is `"strategy"`, OR `"risk_pct"` with `sl == 0.0` (basket SL mode), QuantDeck uses your exact `"lot"` from `ord_spec`.
+  - If the user sets UI Sizing Mode to `"fixed"`, QuantDeck overrides every order with `self.lot_size` (`context["lot_size"]`).
+  - If the user sets UI Sizing Mode to `"risk_pct"` AND `sl > 0`, QuantDeck sizes each leg by risk percentage divided by `abs(entry - sl) * effective_mult`.
+- **Restart & Live Re-run Safety:**
+  - In Live mode, `generate_signals(df)` is called on every closed bar! **Do NOT reset persistent basket state like `self._basket_peak_pct = 0.0` inside `generate_signals()` when `self.is_live` and positions are open.** Reset transient tracking flags only when `not open_pos` or `not self.is_live`.
+  - For layer cooldowns that survive bot restarts cleanly, compare `state["time"] - max(p["entry_time"] for p in open_pos)` against `cooldown_bars * tf_seconds` when possible (or guard `self._last_entry_bar` reset with `if not self.is_live:`).
+
+### 10.5 Compact Multi-Order & Conditional Close Template (`on_bar` + `check_intrabar_basket`)
+```python
+class MultiLegAdaptiveStrategy(BaseStrategy):
+    name = "Multi-Leg Conditional Template"
+    custom_sizing = True
+    multi_position = True
+
+    def __init__(self, params: Optional[Dict[str, Any]] = None):
+        super().__init__(params)
+        self._prep: Optional[Dict[str, np.ndarray]] = None
+        self._basket_peak_pct: float = 0.0
+
+    def generate_signals(self, df: pd.DataFrame) -> Dict[str, Any]:
+        n = len(df)
+        zeros_i = pd.Series(0, index=df.index, dtype=int)
+        zeros_f = pd.Series(0.0, index=df.index, dtype=float)
+        warmup = int(self.params.get("ema_period", 50)) + 5
+        if n < warmup:
+            self._prep = None
+            return {"signals": zeros_i, "sl": zeros_f, "tp": zeros_f, "sizes": zeros_f, "overlays": {}, "execution_mode": "multi"}
+
+        if not self.is_live:
+            self._basket_peak_pct = 0.0
+
+        times = df["time"].to_numpy(dtype=np.int64)
+        close = df["close"].to_numpy(dtype=float)
+        high = df["high"].to_numpy(dtype=float)
+        low = df["low"].to_numpy(dtype=float)
+        ema = df["close"].ewm(span=int(self.params.get("ema_period", 50)), adjust=False).mean().to_numpy(dtype=float)
+        tr = pd.concat([df["high"] - df["low"], (df["high"] - df["close"].shift(1)).abs(), (df["low"] - df["close"].shift(1)).abs()], axis=1).max(axis=1)
+        atr = tr.ewm(alpha=1.0 / 14, adjust=False).mean().fillna(0.0).to_numpy(dtype=float)
+
+        self._prep = {"times": times, "close": close, "ema": ema, "atr": atr, "warmup": np.array([warmup], dtype=np.int64)}
+        return {"signals": zeros_i, "sl": zeros_f, "tp": zeros_f, "sizes": zeros_f, "overlays": {}, "execution_mode": "multi"}
+
+    def check_intrabar_basket(self, state: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        open_pos = state.get("open_positions") or []
+        if not open_pos:
+            self._basket_peak_pct = 0.0
+            return None
+        bal = max(1e-6, float(state.get("balance") or 10000.0))
+        fl_pct = (float(state.get("floating_pnl") or 0.0) / bal) * 100.0
+        if fl_pct <= -float(self.params.get("hard_sl_pct", 15.0)):
+            self._basket_peak_pct = 0.0
+            return {"close_scope": "ALL", "exit_reason": f"Hard SL ({fl_pct:.1f}%)"}
+        if fl_pct >= float(self.params.get("basket_tp_pct", 2.0)):
+            self._basket_peak_pct = 0.0
+            return {"close_scope": "ALL", "exit_reason": f"Basket TP (+{fl_pct:.2f}%)"}
+        return None
+
+    def on_bar(self, bar_idx: int, state: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        if self._prep is None or bar_idx < int(self._prep["warmup"][0]) or bar_idx >= len(self._prep["close"]):
+            return None
+        px = float(self._prep["close"][bar_idx])
+        ema = float(self._prep["ema"][bar_idx])
+        atr = max(1e-6, float(self._prep["atr"][bar_idx]))
+        digits = int(state.get("digits") or 2)
+        open_pos = state.get("open_positions") or []
+        buy_legs = [p for p in open_pos if p.get("side") == "BUY" or p.get("type") == "LONG"]
+
+        # Example Conditional Close 1: LIFO Pruning when holding >= 4 BUY legs & newest + worst net > 0
+        if len(buy_legs) >= 4:
+            newest, worst = buy_legs[-1], min(buy_legs[:-1], key=lambda x: float(x.get("pnl") or 0.0))
+            if float(newest.get("pnl") or 0.0) > 0 and (float(newest.get("pnl") or 0.0) + float(worst.get("pnl") or 0.0)) > 0:
+                return {"close_ids": [str(newest["id"]), str(worst["id"])], "exit_reason": "LIFO Prune"}
+
+        # Example Conditional Close 2: Weighted-Average BUY Basket TP when above avg_entry + ATR*TP
+        avg_buy = float(state.get("avg_entry_buy") or 0.0)
+        if buy_legs and avg_buy > 0 and px >= avg_buy + atr * 1.2:
+            if sum(float(p.get("pnl") or 0.0) for p in buy_legs) > 0:
+                return {"close_scope": "BUY", "exit_reason": "Basket Avg TP"}
+
+        # Example Multi-Leg Entry: Scale into dips below EMA & lowest BUY leg
+        if len(buy_legs) < int(self.params.get("max_orders", 5)):
+            need_entry = (px <= ema - 0.5 * atr) if not buy_legs else (px <= min(float(p["entry_price"]) for p in buy_legs) - atr)
+            if need_entry:
+                layer = len(buy_legs) + 1
+                lot = max(0.01, round(float(self.params.get("base_lot", 0.01)) * (1.2 ** (layer - 1)), 2))
+                return {"orders": [{"side": "BUY", "lot": lot, "sl": 0.0, "tp": round(px + atr * 1.5, digits), "tag": f"B{layer}"}]}
+        return None
+```
+- Built-in reference implementation: `backend/strategies/builtins/ema_atr_equity_grid.py` (`EMAAtrEquityGridStrategy`).

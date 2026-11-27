@@ -1,4 +1,4 @@
-# QuantDeck v2.4.21 — Institutional Charting & Multi-Broker Trading Workstation
+# QuantDeck v2.4.22 — Institutional Charting & Multi-Broker Trading Workstation
 
 > **One desktop workstation for charting, backtesting, and automated execution.** Covers Forex, Gold, Crypto, Indices, US Equities, and Thai SET/TFEX.
 > Connect **MT5, cTrader, and SimpleFX** simultaneously. Draw with 70+ institutional tools, run visual backtests with Optuna optimization, operate 24/7 live bots, and manage your portfolio from a centralized Execution Toolbox.
@@ -23,6 +23,14 @@
 
 <!-- Workstation Preview Screenshot / Demo GIF -->
 <!-- ![QuantDeck Multi-Broker Workstation](https://raw.githubusercontent.com/theoris/quantdeck/main/docs/assets/quantdeck_preview.png) -->
+
+---
+
+## ✨ What's New in v2.4.22
+
+- **Independent Per-Chart Cross-Symbol & Timeframe Watermark Label Tool (`symbol_tf_label`):**
+  - Added the **Symbol & TF Label (`🔖`)** drawing tool under Text & Notes (`toolbar.ts`, `drawing-manager.ts`), placing a clean 2-line live label (`SYMBOL` on line 1, `TIMEFRAME` on line 2) pinned independently per chart pane (`paneSlotKey`) by viewport percentage (`anchorXPct` / `anchorYPct`). It automatically updates and stays in position across Symbol switches, Timeframe changes, and pan/zoom **within that chart pane only** (without duplicating onto other charts in Multi-Chart layout).
+  - Defaults to a translucent theme-adaptive watermark style (soft opacity, transparent background, borderless) that adapts cleanly between Dark and Light themes while keeping the floating canvas bar compact (`⚙️ Settings | Lock | Clone | Hide | Delete`) and organizing Font Family, Font Size, Font Color, Text Opacity, Text Align (`Left / Center / Right`), Background Fill, Border Style, Viewport Anchor `%` corner presets, Timeframe Visibility, and Saved Defaults cleanly inside the tabbed `DrawingSettingsModal` (`drawing-defaults.ts`, `drawing-settings-modal.ts`, `object-tree.ts`, `state-store.ts`, `disk-storage-sync.ts`).
 
 ---
 
@@ -118,8 +126,8 @@
 ### 🔐 Cryptographic Verification (SHA-256)
 
 ```text
-CC3B0AD61D5A590327F778AF22044E0B28638ACF4AFFD2808568820C912946B1  QuantDeck_Standalone_Release.zip
-935FF6304B960776F7F0C89E9F70C6C813D7AA91D79AA1D84C2A9FA960E9B825  QuantDeck_Standalone_Setup.exe
+934A9481C91B4B29CAB3AF287A1C13D0CCD6BC8A5676DC7864133F9A096C1CE1  QuantDeck_Standalone_Release.zip
+5C3C480EDF318B0FAB0BD7DEBAD9D20AB43EF55C6E360F532770D0041C64793F  QuantDeck_Standalone_Setup.exe
 ```
 
 To verify the file integrity in Windows PowerShell:

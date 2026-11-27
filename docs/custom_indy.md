@@ -1430,3 +1430,40 @@ Before returning the `.ts` indicator file to the user, verify all 12 items:
 10. [ ] **Clean Parameter Scope**: Only adds `bannerPosition`, `dashboardPosition`, `themeMode`, or `priceDigits` in `paramDefs` if they are actually wired and used in the indicator logic/HUD.
 11. [ ] **Valid `paramDefs` Types**: Uses only supported `IndicatorParamDef` types (`'number'`, `'color'`, `'select'`, `'text'`, `'boolean'`), preferring `'select'` (`Show: 1` / `Hide: 0`) for On/Off dropdowns.
 12. [ ] **Zero-Lag Intrabar Sync & Whitespace Safety**: If rendering real-time Canvas HUD / live price levels, syncs the forming bar from `engine.allBars` / `series.data()` inside `draw()` (skipping trailing future whitespace `{ time }` points) rather than relying solely on a static copy of `_rawBars`.
+
+---
+
+## 📏 Section 11: Central Level Lines (`defaultLevels` & Theme-Aware `'auto'` Colors)
+
+When writing oscillators or sub-pane indicators (such as RSI, Stochastic, CCI, Williams %R) that need horizontal reference lines (e.g., `70 / 30` or `80 / 20`):
+
+- **Do NOT hardcode** `series.createPriceLine(...)` with fixed light/dark colors like `'rgba(255,255,255,0.2)'` inside `render()` — hardcoded white lines become invisible on Light Theme, and users will not be able to add, edit, or hide levels from the Indicator Settings UI.
+- Instead, declare `this.defaultLevels` inside your indicator `constructor()` (or `render()`), and register your primary series cleanly so `IndicatorManager` manages every horizontal line **per indicator instance (`ind.id`)**:
+
+```javascript
+constructor(id) {
+  this.id = id;
+  this.name = 'My Oscillator';
+  this.pane = 'sub';
+
+  // Managed centrally by IndicatorManager + "📏 Levels" tab in Settings
+  // Users can add/edit/hide/delete levels per instance without modifying code.
+  this.defaultLevels = [
+    { price: 70, color: 'auto', lineStyle: 2, lineWidth: 1, label: '70', visible: true },
+    { price: 30, color: 'auto', lineStyle: 2, lineWidth: 1, label: '30', visible: true },
+  ];
+}
+
+// Optional helper when your indicator manages multiple series on its pane:
+getPrimarySeries() {
+  return this.mainSeries || null;
+}
+```
+
+### Rules & Contract
+1. **Shorthand Supported**: Numeric arrays such as `this.defaultLevels = [80, 50, 20];` are automatically normalized to `{ price, color: 'auto', lineStyle: 2, lineWidth: 1, label: String(price), visible: true }`.
+2. **Theme-Aware `'auto'` Color**: Setting `color: 'auto'` (the default) automatically picks high-contrast slate ink on Light Theme (`rgba(30, 41, 59, 0.42)`) and cool silver on Dark Theme (`rgba(203, 213, 225, 0.40)`), and live-updates immediately when toggling Dark ↔ Light themes (`qd_theme_changed`).
+3. **`lineStyle` Values**: `0` = Solid, `1` = Dotted, `2` = Dashed (default).
+4. **Per-Instance Isolation & Persistence**: Edits made in `⚙️ Settings → 📏 Levels` are stored on that specific indicator instance (`ind.levels`) and persisted in workspace JSON without affecting other active indicators (e.g., editing RSI levels does not touch MACD or a second RSI).
+5. **Sub-pane Registration**: Always call `engine.registerSubPaneSeries(this.id, primarySeries)` inside `render()` for `'sub'` indicators (or expose `getPrimarySeries()`) so Central Levels attach cleanly to the indicator's Y-axis scale.
+6. **ES2020 Syntax**: Declare `this.defaultLevels = [...]` using plain JavaScript values (no TypeScript interfaces or type casts) inside custom `.ts` / `.js` indicator files.

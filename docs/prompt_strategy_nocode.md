@@ -21,10 +21,10 @@ I do NOT know how to code. Please help me design and build a QuantDeck Custom Py
 2. Explain your proposed trading rules in simple, non-technical trader language (no programming jargon).
 3. Ask me 3–4 short, easy questions with Recommended options (A / B / C) so I can choose:
    - Entry confirmation style (e.g., fast crossover vs. trend + pullback filter vs. multi-timeframe trend filter)
-   - Stop Loss & Take Profit style (e.g., ATR-based SL + 1:2 Risk/Reward TP vs. close on opposite signal)
-   - Position management (1 trade at a time vs. multiple trades, % risk per trade vs. fixed lot)
-   - What settings I should be able to adjust in the Strategy/Bot UI
-4. Once I reply with my choices (or say "use recommended"), generate the complete, zero-lookahead .py file following all rules in custom_strategy.md (including Live Bot & News Guard recovery compatibility).
+   - Stop Loss & Take Profit style (e.g., ATR-based SL + 1:2 Risk/Reward TP, close on opposite signal, or Basket Equity % TP / Trailing / Hard Stop Loss)
+   - Position management & conditional closes (1 trade at a time vs. Multi-Order / Grid / Pyramiding / Split-TP, % risk vs. equity-scaled lot, partial pruning or close BUY/SELL/ALL rules)
+   - What key settings I should adjust in Backtest / Optuna Optimizer without making optimization too slow
+4. Once I reply with my choices (or say "use recommended"), generate the complete, zero-lookahead .py file following all rules in custom_strategy.md (using Section 10 `multi_position = True` if multiple concurrent orders or conditional/partial closes are requested, plus Live Bot & News Guard recovery compatibility).
 ```
 
 ---
@@ -44,10 +44,10 @@ I do NOT know how to code. Please help me design and build a QuantDeck Custom Py
 2. สรุปกติกาการเทรดที่แนะนำเป็นภาษาเทรดเดอร์ที่เข้าใจง่าย (ไม่ต้องใช้ศัพท์เทคนิคโค้ด)
 3. ตั้งคำถามสั้นๆ 3–4 ข้อ พร้อม **ตัวเลือกแนะนำ (A / B / C)** ให้ฉันเลือกง่ายๆ ได้แก่:
    - รูปแบบการยืนยันจุดเข้า (เช่น ตัดกันเร็วๆ, รอย่อตัวตามเทรนด์, หรือกรองด้วย Timeframe ใหญ่)
-   - การตั้ง Stop Loss / Take Profit (เช่น SL ตามความผันผวน ATR + TP 1:2, หรือปิดเมื่อมีสัญญาณกลับทิศ)
-   - การคุมจำนวนออเดอร์และขนาด Lot (เปิดทีละ 1 ออเดอร์ vs หลายออเดอร์, คำนวณ Lot ตาม % ความเสี่ยง vs Fixed Lot)
-   - ค่าที่อยากให้ปรับจูนได้เองในหน้า Backtest / Bot Settings
-4. เมื่อฉันตอบเลือกตัวเลือกแล้ว (หรือบอกว่า "ใช้ตามที่แนะนำได้เลย") ให้สร้างไฟล์ .py ที่สมบูรณ์ ไม่มองอนาคต (Zero-Lookahead) และรองรับการทำงานร่วมกับ Live Bot และ News Guard ตามกฎทั้งหมดใน custom_strategy.md ทันที
+   - การตั้ง Stop Loss / Take Profit (เช่น SL ตามความผันผวน ATR + TP 1:2, ปิดเมื่อมีสัญญาณกลับทิศ, หรือปิดรวบตะกร้า Basket % Equity / Trailing / Hard Cut-Loss)
+   - การคุมจำนวนออเดอร์และเงื่อนไขปิดเฉพาะบางไม้ (เปิดทีละ 1 ออเดอร์ vs หลายออเดอร์แบบ Grid / เติมไม้ / แบ่ง TP / ปิดแยกฝั่ง BUY-SELL หรือตัดไม้ลึก, คำนวณ Lot ตาม % ความเสี่ยง หรือปรับตาม Equity)
+   - ค่าที่ควรเปิดให้ปรับจูนในหน้า Backtest / Optimizer โดยไม่ให้พารามิเตอร์รกเกินไป
+4. เมื่อฉันตอบเลือกตัวเลือกแล้ว (หรือบอกว่า "ใช้ตามที่แนะนำได้เลย") ให้สร้างไฟล์ .py ที่สมบูรณ์ ไม่มองอนาคต (Zero-Lookahead) โดยใช้ Section 10 (`multi_position = True`) หากมีการเปิด-ปิดหลายออเดอร์หรือปิดตามเงื่อนไข และรองรับ Live Bot และ News Guard ตามกฎทั้งหมดใน custom_strategy.md ทันที
 ```
 
 ---
@@ -67,10 +67,10 @@ I do NOT know how to code. Please help me design and build a QuantDeck Custom Py
 2. 用交易员能听懂的通俗语言概括交易规则（不要使用编程术语）。
 3. 向我提出 3–4 个简短易懂的选择题，并为每题提供 **推荐选项 (A / B / C)** 供我挑选：
    - 入场确认方式（例如：快速交叉、顺势回调确认、或大周期趋势过滤）
-   - 止损与止盈方式（例如：ATR 动态止损 + 1:2 盈亏比止盈，或反向信号平仓）
-   - 仓位与持仓管理（单笔持仓 vs 多笔持仓，按账户风险百分比计算手数 vs 固定手数）
-   - 希望在回测/机器人设置界面保留哪些可调参数
-4. 当我回复选择结果后（或回复"按推荐方案生成"），请严格依据 custom_strategy.md 生成完整、无未来函数、并兼容实盘机器人与 News Guard 恢复机制的 .py 文件。
+   - 止损与止盈方式（例如：ATR 动态止损 + 1:2 盈亏比止盈、反向信号平仓，或按账户净值百分比% 整体止盈/追踪止盈/硬止损）
+   - 仓位与多单管理（单笔持仓 vs 多单网格/加仓/分批止盈/条件平仓，按风险百分比 vs 按净值动态计算手数）
+   - 希望在回测/参数优化中开放哪些核心参数（避免参数过多影响优化收敛）
+4. 当我回复选择结果后（或回复"按推荐方案生成"），请严格依据 custom_strategy.md 生成完整、无未来函数的 .py 文件；若涉及多单或条件部分平仓请使用 Section 10（`multi_position = True`），并确保兼容实盘与 News Guard 恢复机制。
 ```
 
 ---
@@ -90,10 +90,10 @@ I do NOT know how to code. Please help me design and build a QuantDeck Custom Py
 2. 専門的なプログラム用語を使わず、トレーダー向けの分かりやすい言葉で売買ルール案を説明してください。
 3. 私が選びやすいように、**おすすめ案付きの選択式質問（A / B / C）を 3〜4 個** 出してください：
    - エントリー確認方法（例：素早いクロス / 押し目・戻り目フィルター / 上位足トレンドフィルター）
-   - 損切り・利確（SL/TP）の決め方（例：ATR ベースの SL + リスクリワード 1:2、または逆シグナルで決済）
-   - ポジション管理（1ポジションずつ vs 複数ポジション、% リスク計算 vs 固定ロット）
-   - バックテストやボット設定画面で後から調整したい項目
-4. 私が選択肢を返信したら（または「おすすめで作成して」と伝えたら）、custom_strategy.md の全ルール（ライブボットおよび News Guard 復帰対応を含む）に従って完成版の .py ファイルを出力してください。
+   - 損切り・利確（SL/TP）の決め方（例：ATR ベースの SL + リスクリワード 1:2、逆シグナル決済、またはバスケット有効証拠金% 利確/トレール/強制損切り）
+   - ポジション管理と条件決済（1ポジション vs グリッド・ピラミッディング・分割利確・条件付き部分決済、% リスク計算 vs 証拠金連動ロット）
+   - バックテストや最適化（Optuna）が重くならない範囲で調整したい主要項目
+4. 私が選択肢を返信したら（または「おすすめで作成して」と伝えたら）、複数注文・条件付き決済の場合は Section 10（`multi_position = True`）を使用し、ライブボット＆News Guard 復帰対応も含めて custom_strategy.md 準拠の完全な .py ファイルを出力してください。
 ```
 
 ---
@@ -113,10 +113,10 @@ I do NOT know how to code. Please help me design and build a QuantDeck Custom Py
 2. 코딩 전문 용어 없이 트레이더가 이해하기 쉬운 말로 매매 규칙을 설명해 주세요.
 3. 제가 고르기 쉽도록 **추천 옵션(A / B / C)이 포함된 간단한 질문 3~4개**를 해주세요:
    - 진입 확인 방식 (예: 빠른 크로스 vs 추세 눌림목 필터 vs 상위 타임프레임 추세 필터)
-   - 손절/익절(SL/TP) 방식 (예: ATR 기반 손절 + 1:2 손익비 익절 vs 반대 신호 시 청산)
-   - 포지션 관리 (1포지션 유지 vs 다중 포지션, 리스크 % 기반 랏 계산 vs 고정 랏)
-   - 백테스트 및 봇 설정 창에서 조절하고 싶은 파라미터
-4. 제가 선택을 답변하면(또는 "추천대로 만들어 줘"라고 하면) custom_strategy.md의 모든 규칙(라이브 봇 및 News Guard 복구 호환 포함)에 맞춰 완성형 .py 파일을 생성해 주세요.
+   - 손절/익절(SL/TP) 방식 (예: ATR 기반 손절 + 1:2 손익비 익절, 반대 신호 청산, 또는 바스켓 자산 % 익절/트레일링/강제 손절)
+   - 다중 주문 및 조건부 청산 (1포지션 유지 vs 그리드·물타기·피라미딩·분할 익절·조건부 부분 청산, 리스크 % vs 자산 연동 랏 계산)
+   - 백테스트 및 Optuna 최적화 속도를 해치지 않으면서 조절하고 싶은 핵심 파라미터
+4. 제가 선택을 답변하면(또는 "추천대로 만들어 줘"라고 하면) 다중 주문/조건 청산 시 Section 10(`multi_position = True`)을 적용하고, 라이브 봇 및 News Guard 복구를 지원하도록 custom_strategy.md의 모든 규칙에 맞춰 완성형 .py 파일을 생성해 주세요.
 ```
 
 ---
@@ -136,10 +136,10 @@ Tôi KHÔNG biết lập trình. Hãy giúp tôi thiết kế và tạo một Qu
 2. Giải thích quy tắc giao dịch đề xuất bằng ngôn ngữ trader dễ hiểu (không dùng thuật ngữ lập trình).
 3. Hỏi tôi 3–4 câu ngắn gọn kèm **gợi ý lựa chọn (A / B / C)** để tôi chọn:
    - Cách xác nhận điểm vào lệnh (ví dụ: cắt nhau nhanh, lọc theo xu hướng + hồi giá, hoặc lọc theo khung thời gian lớn)
-   - Cách đặt Stop Loss / Take Profit (ví dụ: SL theo ATR + TP tỷ lệ 1:2, hoặc đóng lệnh khi có tín hiệu đảo chiều)
-   - Quản lý lệnh & khối lượng (1 lệnh mỗi lần vs nhiều lệnh, tính lot theo % rủi ro vs lot cố định)
-   - Các thông số muốn tùy chỉnh trong phần Backtest / Bot Settings
-4. Sau khi tôi chọn xong (hoặc nói "làm theo gợi ý"), hãy tạo tệp .py hoàn chỉnh không lookahead và tương thích với Live Bot & News Guard theo đúng mọi quy tắc trong custom_strategy.md.
+   - Cách đặt Stop Loss / Take Profit (ví dụ: SL theo ATR + TP 1:2, đóng khi đảo chiều, hoặc chốt lời/cắt lỗ cả rổ theo % Equity)
+   - Quản lý nhiều lệnh & đóng theo điều kiện (1 lệnh vs Grid / nhồi lệnh / chia TP / đóng từng phần theo điều kiện, lot theo % rủi ro vs theo Equity)
+   - Các thông số cốt lõi cần tùy chỉnh trong Backtest / Optimizer mà không làm quá tải số tham số
+4. Sau khi tôi chọn xong (hoặc nói "làm theo gợi ý"), hãy áp dụng Section 10 (`multi_position = True`) nếu chiến lược có nhiều lệnh hoặc đóng từng phần, và xuất tệp .py hoàn chỉnh tương thích Live Bot & News Guard theo đúng custom_strategy.md.
 ```
 
 ---
@@ -159,10 +159,10 @@ NO sé programar. Por favor ayúdame a diseñar y crear una Estrategia Personali
 2. Explica las reglas propuestas en lenguaje sencillo de trading (sin jerga de programación).
 3. Hazme 3–4 preguntas cortas con **opciones recomendadas (A / B / C)** para elegir:
    - Estilo de confirmación de entrada (cruce rápido vs. filtro de tendencia + retroceso vs. filtro de temporalidad superior)
-   - Estilo de Stop Loss y Take Profit (SL basado en ATR + TP 1:2 Riesgo/Beneficio vs. cerrar con señal contraria)
-   - Gestión de posiciones (1 operación a la vez vs. múltiples operaciones, % de riesgo por operación vs. lote fijo)
-   - Qué ajustes debería poder cambiar en la interfaz de Backtest / Bot
-4. Cuando responda mis elecciones (o diga "usa lo recomendado"), genera el archivo .py completo, sin lookahead y compatible con Live Bot y recuperación de News Guard según custom_strategy.md.
+   - Estilo de Stop Loss y Take Profit (SL por ATR + TP 1:2, cerrar con señal contraria, o TP/SL de cesta por % de Equidad y Trailing)
+   - Gestión multi-orden y cierre condicional (1 operación vs. Grid / piramidación / TP dividido / cierre parcial condicional, lote por % riesgo vs. escalado por Equidad)
+   - Ajustes clave que conviene dejar editables en Backtest / Optuna sin sobrecargar la optimización
+4. Cuando responda mis elecciones (o diga "usa lo recomendado"), utiliza la Section 10 (`multi_position = True`) si requiere múltiples órdenes o cierres condicionales, y genera el .py completo sin lookahead compatible con Live Bot y News Guard según custom_strategy.md.
 ```
 
 ---
@@ -182,10 +182,10 @@ Ich kann NICHT programmieren. Bitte hilf mir, eine QuantDeck Custom Python Strat
 2. Erkläre die vorgeschlagenen Handelsregeln in verständlicher Trading-Sprache (ohne Programmier-Jargon).
 3. Stelle mir 3–4 kurze Fragen mit **empfohlenen Auswahlmöglichkeiten (A / B / C)**:
    - Einstiegsbestätigung (schnelles Kreuzen vs. Trend- + Pullback-Filter vs. übergeordneter Zeitrahmen-Filter)
-   - Stop-Loss- & Take-Profit-Logik (ATR-basierter SL + 1:2 CRV-TP vs. Schließen bei Gegensignal)
-   - Positionsmanagement (1 Trade gleichzeitig vs. mehrere Trades, % Risiko pro Trade vs. feste Lotgröße)
-   - Welche Parameter ich im Backtest-/Bot-Menü anpassen können möchte
-4. Sobald ich meine Auswahl antworte (oder „nimm deine Empfehlung“ sage), erstelle die vollständige, Lookahead-freie .py-Datei nach allen Regeln aus custom_strategy.md (inkl. Live-Bot- & News-Guard-Wiederaufnahme).
+   - Stop-Loss- & Take-Profit-Logik (ATR-SL + 1:2 CRV, Gegensignal oder Basket-Equity-% TP/Trailing/Hard-SL)
+   - Multi-Order- & Teilschließungslogik (1 Trade gleichzeitig vs. Grid / Pyramiding / Split-TP / bedingte Teilschließung, % Risiko vs. Equity-Lot)
+   - Welche wichtigen Parameter für Backtest / Optuna anpassbar bleiben sollen, ohne die Optimierung zu überladen
+4. Sobald ich meine Auswahl antworte (oder „nimm deine Empfehlung“ sage), nutze Section 10 (`multi_position = True`) bei mehreren Orders oder bedingten Schließungen und erstelle die vollständige .py-Datei nach allen Regeln aus custom_strategy.md.
 ```
 
 ---
@@ -205,8 +205,8 @@ Ich kann NICHT programmieren. Bitte hilf mir, eine QuantDeck Custom Python Strat
 2. اشرح قواعد التداول المقترحة بلغة تداول بسيطة وواضحة (بدون مصطلحات برمجية).
 3. اسألني 3–4 أسئلة قصيرة مع **خيارات مقترحة (A / B / C)** لأختار منها:
    - أسلوب تأكيد الدخول (تقاطع سريع أم فلتر اتجاه + تصحيح أم فلتر إطار زمني أعلى)
-   - أسلوب وقف الخسارة وجني الأرباح (SL حسب ATR + هدف 1:2 أم الإغلاق عند الإشارة المعاكسة)
-   - إدارة الصفقات وحجم اللوت (صفقة واحدة في كل مرة أم صفقات متعددة، % مخاطرة لكل صفقة أم لوت ثابت)
-   - الإعدادات التي يفضل أن أتمكن من تعديلها في واجهة Backtest / Bot
-4. بمجرد أن أختار (أو أقول "استخدم التوصية")، قم بإنشاء ملف .py الكامل الخالي من التطلع المستقبلي والمتوافق مع البوت الحي واستعادة News Guard وفق جميع قواعد custom_strategy.md.
+   - أسلوب وقف الخسارة وجني الأرباح (SL حسب ATR + هدف 1:2 أو الإغلاق عند الإشارة المعاكسة أو إغلاق السلة بنسبة % من Equity)
+   - إدارة الصفقات المتعددة والإغلاق الشرطي (صفقة واحدة أم صفقات متعددة / Grid / تعزيز / تقسيم الأهداف / إغلاق جزئي شرطي، لوت % مخاطرة أم متدرج حسب رأس المال)
+   - الإعدادات الأساسية التي أحتاج لتعديلها في Backtest / Optimizer دون إبطاء التحسين
+4. بمجرد أن أختار (أو أقول "استخدم التوصية")، طبّق Section 10 (`multi_position = True`) عند وجود تعدد صفقات أو إغلاق شرطي وأنشئ ملف .py الكامل المتوافق مع البوت الحي و News Guard وفق custom_strategy.md.
 ```
